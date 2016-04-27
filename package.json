@@ -56,7 +56,6 @@
     "npmAlgorithm": "flat"
   },
   "dependencies": {
-    "can": "^2.3.16",
     "can-compute": "^3.0.0-pre.2",
     "can-event": "^3.0.0-pre.2",
     "can-map": "^3.0.0-pre.2",
