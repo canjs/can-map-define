@@ -16,7 +16,7 @@ A constructor function can be provided that is called to convert incoming values
 
 @body
 
-Similar to [can-map-define.type type], this uppercase version provides a mechanism for converting incoming values to another format or type.
+Similar to [can-map-define._type type], this uppercase version provides a mechanism for converting incoming values to another format or type.
 
 Specifically, this constructor will be invoked any time this property is set, and any data passed into the setter will be passed as arguments for the constructor.
 

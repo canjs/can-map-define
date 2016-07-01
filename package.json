@@ -97,7 +97,7 @@
       ]
     },
     "readme": {
-      "apis": "./docs/apis.json"
+      "apis": "./doc/apis.json"
     },
     "parent": "can-map-define"
   }

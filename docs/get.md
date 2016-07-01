@@ -164,7 +164,7 @@ map.attr("value") //-> 2
 This technique should only be used when the `lastSetValue` is some form of
 observable, that when it changes, can update the `getter` value.
 
-For simple conversions, [can-map-define.set] or [can-map-define.type] should be used.
+For simple conversions, [can-map-define.set set] or [can-map-define._type type] should be used.
 
 ## Updating the virtual property value
 

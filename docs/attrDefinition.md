@@ -34,8 +34,8 @@ set as the initial value of the attribute. For example, if the default value sho
       }
     }
 
-@option {can-map-define.type|String} type Specifies the type of the 
-attribute.  The type can be specified as either a [can-map-define.type type function] 
+@option {can-map-define._type|String} type Specifies the type of the 
+attribute.  The type can be specified as either a [can-map-define._type type function] 
 that returns the type coerced value or one of the following strings:
 
  - `"string"` - Converts the value to a string.

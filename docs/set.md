@@ -28,7 +28,7 @@ behaves differently than:
       }
     }
 
-@param {*} [newVal] The [can-map-define.type type function] coerced value the user intends to set on the
+@param {*} [newVal] The [can-map-define._type type function] coerced value the user intends to set on the
 [can-map Map].
 
 @param {function(*)} [setValue(newValue)] A callback that can set the value of the property

@@ -1,4 +1,4 @@
-@function can-map-define.type type
+@function can-map-define._type type
 @parent can-map-define
 
 Converts a value passed to [can-map.prototype.attr attr] into an appropriate value.

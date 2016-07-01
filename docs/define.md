@@ -107,7 +107,7 @@ Here is the cliffnotes version of this plugin.  To define...
 * Behavior when a property is set - use [can-map-define.set set]
 * How a property is serialized when [can-map.prototype.serialize serialize] is called on it - use [can-map-define.serialize serialize]
 * Behavior when a property is removed - use [can-map-define.remove remove]
-* A custom converter method or a pre-defined standard converter called whenever a property is set - use [can-map-define.type type]
+* A custom converter method or a pre-defined standard converter called whenever a property is set - use [can-map-define._type type]
 * That custom converter method as a constructor function - use [can-map-define.TypeConstructor Type]
 
 ## Demo
