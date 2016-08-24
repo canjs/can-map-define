@@ -1232,3 +1232,17 @@ test("double get in a compute (#2230)", function() {
 	c.bind("change", function() {});
 
 });
+
+test("works on can-lists", function() {
+	var MyList = List.extend({}, {
+		define: {
+			foo: {
+				value: "bar"
+			}
+		}
+	});
+
+	var list = new MyList();
+
+	equal(list.attr("foo"), "bar");
+});
