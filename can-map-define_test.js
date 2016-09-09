@@ -1101,7 +1101,7 @@ test("type converters handle null and undefined in expected ways (1693)", functi
 
 	equal(t.attr("number"), undefined, "converted to number");
 
-	equal(t.attr("boolean"), false, "converted to boolean");
+	equal(t.attr("boolean"), undefined, "converted to boolean");
 
 	equal(t.attr("htmlbool"), false, "converted to htmlbool");
 
@@ -1122,7 +1122,7 @@ test("type converters handle null and undefined in expected ways (1693)", functi
 
 	equal(t.attr("number"), null, "converted to number");
 
-	equal(t.attr("boolean"), false, "converted to boolean");
+	equal(t.attr("boolean"), null, "converted to boolean");
 
 	equal(t.attr("htmlbool"), false, "converted to htmlbool");
 
@@ -1232,3 +1232,39 @@ test("double get in a compute (#2230)", function() {
 	c.bind("change", function() {});
 
 });
+
+test("nullish values are not converted for Type", function(assert) {
+
+	var VM = CanMap.extend({
+		define: {
+			map: {
+				Type: CanMap
+			},
+			notype: {},
+		}
+	});
+
+	var vm = new VM({
+		num: 1,
+		bool: true,
+		htmlbool: "foo",
+		str: "foo",
+		date: Date.now(),
+		map: {},
+		notype: {}
+	});
+
+	// Sanity check
+	assert.ok(vm.attr("map") instanceof CanMap, "map is a Map");
+	assert.ok(vm.attr("notype") instanceof CanMap, "notype is a Map");
+
+	vm.attr({
+		map: null,
+		notype: null
+	});
+
+	assert.equal(vm.attr("map"), null, "map is null");
+	assert.equal(vm.attr("map"), null, "notype is null");
+});
+
+
