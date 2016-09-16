@@ -217,6 +217,9 @@ define.types = {
 		return +(val);
 	},
 	'boolean': function(val) {
+		if(val == null) {
+			return val;
+		}
 		if (val === 'false' || val === '0' || !val) {
 			return false;
 		}
@@ -271,8 +274,8 @@ proto.__type = function(value, prop) {
 		if (type) {
 			newValue = type.call(this, newValue, prop);
 		}
-		// If there's a Type create a new instance of it
-		if (Type && !(newValue instanceof Type)) {
+		// If there's a Type and newValue is non-null create a new instance of it
+		if (Type && newValue != null && !(newValue instanceof Type)) {
 			newValue = new Type(newValue);
 		}
 		// If the newValue is a Map, we need to hook it up
