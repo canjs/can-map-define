@@ -354,7 +354,8 @@ proto.serialize = function(property) {
 		// if it's not already defined
 		if (!(attr in serialized)) {
 			// check there is a serializer so we aren't doing extra work on serializer:false
-			serializer = this.define && this.define[attr] && this.define[attr].serialize;
+			// also check for a wildcard serializer
+			serializer = this.define && (this.define[attr] && this.define[attr].serialize || this.define['*'] && this.define['*'].serialize);
 			if (serializer) {
 				val = serializeProp(this, attr, this.attr(attr));
 				if (val !== undefined) {
