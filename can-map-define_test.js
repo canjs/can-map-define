@@ -1295,3 +1295,14 @@ test("Wildcard serialize doesn't apply to getter properties (#4)", function() {
 		implicitlySerialized: true
 	});
 });
+
+test("compute props can be set to null or undefined (#2372)", function(assert) {
+	var VM = CanMap.extend({ define: {
+	    foo: { type: 'compute' }
+	}});
+
+	var vmNull = new VM({foo: null});
+	assert.equal(vmNull.foo, null, "foo is null, no error thrown");
+	var vmUndef = new VM({foo: undefined});
+	assert.equal(vmUndef.foo, undefined, "foo is null, no error thrown");
+});

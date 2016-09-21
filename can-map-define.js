@@ -243,7 +243,7 @@ define.types = {
 	},
 	'compute': {
 		set: function(newValue, setVal, setErr, oldValue) {
-			if (newValue.isComputed) {
+			if (newValue && newValue.isComputed) {
 				return newValue;
 			}
 			if (oldValue && oldValue.isComputed) {
