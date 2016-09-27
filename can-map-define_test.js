@@ -1306,3 +1306,121 @@ test("compute props can be set to null or undefined (#2372)", function(assert) {
 	var vmUndef = new VM({foo: undefined});
 	assert.equal(vmUndef.foo, undefined, "foo is null, no error thrown");
 });
+
+test("can inherit computes from another map (#2)", 4, function(){
+ 		var string1 = 'a string';
+ 		var string2 = 'another string';
+ 
+ 		var MapA = CanMap.extend({
+ 			define: {
+ 				propA: {
+ 					get: function() {
+ 						return string1;
+ 					}
+ 				},
+ 				propB: {
+ 					get: function() {
+ 						return string1;
+ 					},
+ 					set: function(newVal) {
+ 						equal(newVal, string1, 'set was called');
+ 					}
+ 				}
+ 			}
+ 		});
+ 		var MapB = MapA.extend({
+ 			define: {
+ 				propC: {
+ 					get: function() {
+ 						return string2;
+ 					}
+ 				},
+ 				propB: {
+ 					get: function() {
+ 						return string2;
+ 					}
+ 				}
+ 			}
+ 		});
+
+		var map = new MapB();
+		
+		equal(map.attr('propC'), string2, 'props only in the child have the correct values');
+ 		equal(map.attr('propB'), string2, 'props in both have the child values');
+ 		equal(map.attr('propA'), string1, 'props only in the parent have the correct values');
+		map.attr('propB', string1);
+
+ 	});
+
+test("can inherit primitive values from another map (#2)", function(){
+	var string1 = 'a';
+	var string2 = 'b';
+
+	var MapA = CanMap.extend({
+		define: {
+			propA: {
+				value: string1
+			},
+			propB: {
+				value: string1
+			}
+		}
+	});
+	var MapB = MapA.extend({
+		define: {
+			propC: {
+				value: string2
+			},
+			propB: {
+				value: string2
+			}
+		}
+	});
+
+	var map = new MapB();
+
+	equal(map.propC, string2, 'props only in the child have the correct values');
+	equal(map.propB, string2, 'props in both have the child values');
+	equal(map.propA, string1, 'props only in the parent have the correct values');
+
+});
+
+test("can inherit object values from another map (#2)", function(){
+	var object1 = {a: 'a'};
+	var object2 = {b: 'b'};
+
+	var MapA = CanMap.extend({
+		define: {
+			propA: {
+				get: function() {
+					return object1;
+				}
+			},
+			propB: {
+				get: function() {
+					return object1;
+				}
+			}
+		}
+	});
+	var MapB = MapA.extend({
+		define: {
+			propB: {
+				get: function() {
+					return object2;
+				}
+			},
+			propC: {
+				get: function() {
+					return object2;
+				}
+			}
+		}
+	});
+
+	var map = new MapB();
+
+	equal(map.attr('propC'), 	object2, 'props only in the child have the correct values');
+	equal(map.attr('propB'), 	object2, 'props in both have the child values');
+	equal(map.attr('propA'), 	object1, 'props only in the parent have the correct values');
+});
