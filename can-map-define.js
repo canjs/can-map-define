@@ -170,7 +170,7 @@ proto.__set = function(prop, value, current, success, error) {
 			return;
 		}
 		// if it took a setter and returned nothing, don't set the value
-		else if (setValue === undefined && !setterCalled && setter.length >= 1) {
+		else if (setValue === undefined && !setterCalled && setter.length > 1) {
 			//!steal-remove-start
 			asyncTimer = setTimeout(function() {
 				dev.warn('can/map/define: Setter "' + prop + '" did not return a value or call the setter callback.');
