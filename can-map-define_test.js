@@ -1306,3 +1306,23 @@ test("compute props can be set to null or undefined (#2372)", function(assert) {
 	var vmUndef = new VM({foo: undefined});
 	assert.equal(vmUndef.foo, undefined, "foo is null, no error thrown");
 });
+
+test("can set properties to undefined", function(){
+	var MyMap = CanMap.extend({
+		define: {
+			foo: {
+				set: function(newVal) {
+					return newVal;
+				}
+			}
+		}
+	});
+
+	var map = new MyMap();
+
+	map.attr('foo', 'bar');
+	equal(map.attr('foo'), 'bar', 'foo should be bar');
+
+	map.attr('foo', undefined);
+	equal(typeof map.attr('foo'), 'undefined', 'foo should be undefined'); 
+});
