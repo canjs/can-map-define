@@ -1,6 +1,6 @@
 {
   "name": "can-map-define",
-  "version": "3.0.0-pre.3",
+  "version": "3.0.0-pre.4",
   "description": "Define rich attribute behavior",
   "homepage": "https://canjs.com",
   "repository": {
@@ -28,31 +28,11 @@
     "develop": "done-serve --static --develop --port 8080"
   },
   "main": "dist/cjs/can-map-define",
-  "browser": {
-    "transform": [
-      "cssify"
-    ]
-  },
-  "browserify": {
-    "transform": [
-      "cssify"
-    ]
-  },
   "keywords": [
     "canjs"
   ],
   "system": {
     "main": "can-map-define",
-    "configDependencies": [
-      "live-reload"
-    ],
-    "npmIgnore": [
-      "documentjs",
-      "testee",
-      "generator-donejs",
-      "donejs-cli",
-      "steal-tools"
-    ],
     "npmAlgorithm": "flat"
   },
   "dependencies": {
@@ -70,8 +50,6 @@
     "can-model": "^2.3.11",
     "can-route": "^3.0.0-pre.8",
     "can-stache": "^3.0.0-pre.11",
-    "cssify": "^0.6.0",
-    "documentjs": "^0.4.2",
     "done-serve": "^0.2.0",
     "donejs-cli": "^0.8.0",
     "generator-donejs": "^0.9.0",

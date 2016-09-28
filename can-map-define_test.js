@@ -1414,13 +1414,35 @@ test("can inherit object values from another map (#2)", function(){
 				get: function() {
 					return object2;
 				}
-			}
+			}	
 		}
 	});
-
+	
 	var map = new MapB();
 
 	equal(map.attr('propC'), 	object2, 'props only in the child have the correct values');
 	equal(map.attr('propB'), 	object2, 'props in both have the child values');
-	equal(map.attr('propA'), 	object1, 'props only in the parent have the correct values');
+	equal(map.attr('propA'), 	object1, 'props only in the parent have the correct values');	
+});
+
+
+test("can set properties to undefined", function(){
+	var MyMap = CanMap.extend({
+		define: {
+			foo: {
+				set: function(newVal) {
+					return newVal;
+
+				}
+			}
+		}
+	});
+
+	var map = new MyMap();
+
+	map.attr('foo', 'bar');
+	equal(map.attr('foo'), 'bar', 'foo should be bar');
+
+	map.attr('foo', undefined);
+	equal(typeof map.attr('foo'), 'undefined', 'foo should be undefined'); 
 });
