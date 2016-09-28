@@ -25,8 +25,14 @@ var getPropDefineBehavior = function(behavior, attr, define) {
 };
 
 // This is called when the Map is defined
-mapHelpers.define = function(Map) {
+mapHelpers.define = function(Map, baseDefine) {
 	var definitions = Map.prototype.define;
+
+	if (baseDefine) {
+		var defines = extend({}, baseDefine);
+		mapHelpers.twoLevelDeepExtend(defines, definitions);
+		extend(definitions, defines);
+	}
 	//!steal-remove-start
 	if (Map.define) {
 		dev.warn("The define property should be on the map's prototype properties, " +
