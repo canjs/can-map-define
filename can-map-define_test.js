@@ -1432,7 +1432,6 @@ test("can set properties to undefined", function(){
 			foo: {
 				set: function(newVal) {
 					return newVal;
-
 				}
 			}
 		}
