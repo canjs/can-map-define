@@ -1,4 +1,4 @@
-@module {plugin} can-map-define define
+@module {plugin} can-map-define can-map-define
 @parent can-legacy
 
 Defines the
