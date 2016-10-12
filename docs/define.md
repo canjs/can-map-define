@@ -1,11 +1,12 @@
 @module {plugin} can-map-define can-map-define
 @parent can-legacy
+@package ../package.json
 
 Defines the
-`type`, initial `value`, `get`, `set`, `remove`, and `serialize` behavior for attributes 
+`type`, initial `value`, `get`, `set`, `remove`, and `serialize` behavior for attributes
 of a [can-map Map].
 
-@option {Object<String,can.Map.prototype.define.attrDefinition>} define A map of 
+@option {Object<String,can.Map.prototype.define.attrDefinition>} define A map of
 attribute names to [can-map-define.attrDefinition attribute definition]
 objects.
 
@@ -14,9 +15,9 @@ objects.
 ## Use
 
 The [can-map-define define] plugin allows you to completely control the behavior
-of attributes on a [can-map Map]. To use it, you specify 
-an `define` object that is a mapping of properties 
-to [can-map-define.attrDefinition attribute definitions]. The following example 
+of attributes on a [can-map Map]. To use it, you specify
+an `define` object that is a mapping of properties
+to [can-map-define.attrDefinition attribute definitions]. The following example
 specifies a Paginate Map:
 
     var Paginate = Map.extend({
@@ -49,12 +50,12 @@ specifies a Paginate Map:
         page: {
           // Setting page changes the offset
           set: function(newVal){
-            this.attr('offset', (parseInt(newVal) - 1) * 
+            this.attr('offset', (parseInt(newVal) - 1) *
                                  this.attr('limit'));
           },
           // The page value is derived from offset and limit.
           get: function (newVal) {
-		    return Math.floor(this.attr('offset') / 
+		    return Math.floor(this.attr('offset') /
 		                      this.attr('limit')) + 1;
 		  }
         }
@@ -63,13 +64,13 @@ specifies a Paginate Map:
 
 ## Default behaviors
 
-The [can-map-define define] plugin not only allows you to define 
+The [can-map-define define] plugin not only allows you to define
 individual attribute behaviors on a [can-map Map], but you can also define default
 behaviors that would apply to any unspecified attribute. This is particularly
 helpful for when you need a particular behavior to apply to every attribute on
 a [can-map Map] but won't be certain of what every attribute will be.
 
-The following example is a [can-map Map] that is tied to [can-route route] where only 
+The following example is a [can-map Map] that is tied to [can-route route] where only
 specified attributes that are serialized will be updated in the location hash:
 
     var State = Map.extend({
@@ -115,7 +116,3 @@ Here is the cliffnotes version of this plugin.  To define...
 The following shows picking cars by make / model / year:
 
 @demo can/map/define/doc/examples/make-model-year.html
-
-
-
-
