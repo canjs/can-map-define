@@ -27,7 +27,7 @@
     "document": "bit-docs",
     "develop": "done-serve --static --develop --port 8080"
   },
-  "main": "dist/cjs/can-map-define",
+  "main": "can-map-define",
   "keywords": [
     "canjs"
   ],
