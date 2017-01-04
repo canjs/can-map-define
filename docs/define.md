@@ -1,4 +1,4 @@
-@module {plugin} can-map-define can-map-define
+@module {Object} can-map-define can-map-define
 @parent can-legacy
 @package ../package.json
 
@@ -6,9 +6,22 @@ Defines the
 `type`, initial `value`, `get`, `set`, `remove`, and `serialize` behavior for attributes
 of a [can-map Map].
 
-@option {Object<String,can.Map.prototype.define.attrDefinition>} define A map of
-attribute names to [can-map-define.attrDefinition attribute definition]
-objects.
+@option {Object} define Exports object with helper methods internal to
+`can-map-define`.  The export of `can-map-define` is not used directly, instead
+the module is imported and all [can-map]'s can have their properties defined like:
+
+```js
+var CanMap = require("can-map");
+require("can-map-define");
+
+var Person = CanMap.extend({
+    define: {
+        fullName: function(){
+            return this.attr("first") + " "+ this.attr("last")
+        }
+    }
+})
+```
 
 @body
 
@@ -115,4 +128,5 @@ Here is the cliffnotes version of this plugin.  To define...
 
 The following shows picking cars by make / model / year:
 
-@demo can/map/define/doc/examples/make-model-year.html
+
+@demo demos/can-map-define/make-model-year.html
