@@ -1445,3 +1445,50 @@ test("can set properties to undefined", function(){
 	map.attr('foo', undefined);
 	equal(typeof map.attr('foo'), 'undefined', 'foo should be undefined'); 
 });
+
+test("subclass defines do not affect superclass ones", function(assert) {
+	var VM = CanMap.extend({
+		define: {
+			foo: {
+				type: "string",
+				value: "bar"
+			}
+		}
+	});
+
+
+	var VM2 =  VM.extend({
+		define: {
+			foo: {
+				value: "baz"
+			}
+		}
+	});
+	var VM2a = VM.extend({});
+
+	var VM2b = VM.extend({
+		define: {
+			foo: {
+				get: function() {
+					return "quux";
+				}
+			}
+		}
+	});
+
+	var VM2c = VM.extend({
+		define: {
+			foo: {
+				type: function(oldVal) {
+					return oldVal + "thud";
+				}
+			}
+		}
+	});
+
+	assert.equal(new VM().attr("foo"), "bar", "correct define on parent class object");
+	assert.equal(new VM2().attr("foo"), "baz", "correct define on redefined child class object");
+	assert.equal(new VM2a().attr("foo"), "bar", "correct define on non-redefined child class object");
+	assert.equal(new VM2b().attr("foo"), "quux", "correct define on child class object with different define");
+	assert.equal(new VM2c().attr("foo"), "barthud", "correct define on child class object with extending define");
+});

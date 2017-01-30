@@ -29,7 +29,8 @@ mapHelpers.define = function(Map, baseDefine) {
 	var definitions = Map.prototype.define;
 
 	if (baseDefine) {
-		var defines = extend({}, baseDefine);
+		var defines = {};
+		mapHelpers.twoLevelDeepExtend(defines, baseDefine);
 		mapHelpers.twoLevelDeepExtend(defines, definitions);
 		extend(definitions, defines);
 	}
