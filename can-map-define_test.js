@@ -1474,7 +1474,7 @@ test("subclass defines do not affect superclass ones", function(assert) {
 				}
 			}
 		}
-	})
+	});
 
 	var VM2c = VM.extend({
 		define: {
