@@ -1492,3 +1492,22 @@ test("subclass defines do not affect superclass ones", function(assert) {
 	assert.equal(new VM2b().attr("foo"), "quux", "correct define on child class object with different define");
 	assert.equal(new VM2c().attr("foo"), "barthud", "correct define on child class object with extending define");
 });
+
+test("value function not set on constructor defaults", function(){
+	var MyMap = CanMap.extend({
+		define: {
+			propA: {
+				value: function(){
+					return 1;
+				}
+			}
+		}
+	});
+
+	var map = new MyMap();
+
+	equal(MyMap.defaults.propA, undefined, 'Generator function does not result in property set on defaults');
+	notEqual(MyMap.defaultGenerators.propA, undefined, 'Generator function set on defaultGenerators');
+	equal(map.attr("propA"), 1, 'Instance value set properly'); //this is mainly so that CI doesn't complain about unused variable
+
+});
