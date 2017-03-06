@@ -69,7 +69,7 @@ mapHelpers.define = function(Map, baseDefine) {
 
 var oldSetupDefaults = CanMap.prototype._setupDefaults;
 CanMap.prototype._setupDefaults = function(obj) {
-	var defaults = oldSetupDefaults.call(this),
+	var defaults = extend({},oldSetupDefaults.call(this)),
 		propsCommittedToAttr = {},
 		Map = this.constructor,
 		originalGet = this._get;
