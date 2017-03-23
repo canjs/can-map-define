@@ -111,7 +111,7 @@ specified attributes that are serialized will be updated in the location hash:
 
 ## Overview
 
-This plugin is a replacement for the now deprecated [can-map-attributes attributes] and [can-map-setter setter] plugins. It intends to provide a single place to define the behavior of all the properties of a [can-map Map].
+This plugin is a replacement for the now deprecated attributes and setter plugins. It intends to provide a single place to define the behavior of all the properties of a [can-map Map].
 
 Here is the cliffnotes version of this plugin.  To define...
 
