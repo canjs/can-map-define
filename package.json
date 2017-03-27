@@ -37,6 +37,7 @@
   "dependencies": {
     "can-compute": "^3.0.4",
     "can-event": "^3.0.1",
+    "can-list": "^3.0.3",
     "can-map": "^3.0.3",
     "can-util": "^3.0.13",
     "jquery": "2.x - 3.x"
@@ -45,7 +46,6 @@
     "bit-docs": "0.0.7",
     "can-component": "^3.0.3",
     "can-fixture": "^1.0.10",
-    "can-list": "^3.0.1",
     "can-model": "^3.0.0-pre.1",
     "can-route": "^3.0.5",
     "can-stache": "^3.0.13",

@@ -6,6 +6,7 @@ var batch = require('can-event/batch/batch');
 var mapHelpers = require('can-map/map-helpers');
 var CanMap = require('can-map');
 var compute = require('can-compute');
+require('can-list');
 
 var define = {}; // jshint ignore:line
 
