@@ -1,5 +1,7 @@
 # can-map-define
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/canjs/can-map-define.svg)](https://greenkeeper.io/)
+
 [![Build Status](https://travis-ci.org/canjs/can-map-define.png?branch=master)](https://travis-ci.org/canjs/can-map-define)
 
 Define rich attribute behavior
