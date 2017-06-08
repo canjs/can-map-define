@@ -414,7 +414,6 @@ test("getter and setter work", function() {
 		equal(oldValue, 3, "got old value event");
 	});
 
-
 	p.attr("page", 2);
 
 	equal(p.attr("page"), 2, "page set right");
@@ -897,9 +896,6 @@ test('setting a value of a property with type "compute" triggers change events',
 	});
 
 	equal(m1.attr('computed'), 0, 'm1 is 1');
-
-	handler = createChangeHandler(0, 1, ".attr('computed', newVal)");
-
 
 	handler = createChangeHandler(0, 1, ".attr('computed', newVal)");
 	m1.bind('computed', handler);
