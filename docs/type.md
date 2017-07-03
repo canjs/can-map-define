@@ -35,7 +35,7 @@ The following example converts the `count` property to a number and the `items` 
          type: function(newValue){
            if(typeof newValue === "string") {
              return newValue.split(",")
-           } else if( can.isArray(newValue) ) {
+           } else if( Array.isArray(newValue) ) {
              return newValue;
            }
          }
