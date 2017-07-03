@@ -1,6 +1,5 @@
 /* jshint asi: false */
 var QUnit = require('steal-qunit');
-var isArray = require('can-util/js/is-array/is-array');
 var string = require('can-util/js/string/string');
 var CanMap = require('can-map');
 var List = require('can-list');
@@ -319,7 +318,7 @@ test("basics value", function() {
 	var t1 = new Typer2(),
 		t2 = new Typer2();
 	ok(t1.attr("prop") !== t2.attr("prop"), "different array instances");
-	ok(isArray(t1.attr("prop")), "its an array");
+	ok(Array.isArray(t1.attr("prop")), "its an array");
 
 
 });
@@ -338,7 +337,7 @@ test("basics Value", function() {
 	var t1 = new Typer(),
 		t2 = new Typer();
 	ok(t1.attr("prop") !== t2.attr("prop"), "different array instances");
-	ok(isArray(t1.attr("prop")), "its an array");
+	ok(Array.isArray(t1.attr("prop")), "its an array");
 
 
 });
@@ -1306,7 +1305,7 @@ test("compute props can be set to null or undefined (#2372)", function(assert) {
 test("can inherit computes from another map (#2)", 4, function(){
  		var string1 = 'a string';
  		var string2 = 'another string';
- 
+
  		var MapA = CanMap.extend({
  			define: {
  				propA: {
@@ -1340,7 +1339,7 @@ test("can inherit computes from another map (#2)", 4, function(){
  		});
 
 		var map = new MapB();
-		
+
 		equal(map.attr('propC'), string2, 'props only in the child have the correct values');
  		equal(map.attr('propB'), string2, 'props in both have the child values');
  		equal(map.attr('propA'), string1, 'props only in the parent have the correct values');
@@ -1410,15 +1409,15 @@ test("can inherit object values from another map (#2)", function(){
 				get: function() {
 					return object2;
 				}
-			}	
+			}
 		}
 	});
-	
+
 	var map = new MapB();
 
 	equal(map.attr('propC'), 	object2, 'props only in the child have the correct values');
 	equal(map.attr('propB'), 	object2, 'props in both have the child values');
-	equal(map.attr('propA'), 	object1, 'props only in the parent have the correct values');	
+	equal(map.attr('propA'), 	object1, 'props only in the parent have the correct values');
 });
 
 
@@ -1439,7 +1438,7 @@ test("can set properties to undefined", function(){
 	equal(map.attr('foo'), 'bar', 'foo should be bar');
 
 	map.attr('foo', undefined);
-	equal(typeof map.attr('foo'), 'undefined', 'foo should be undefined'); 
+	equal(typeof map.attr('foo'), 'undefined', 'foo should be undefined');
 });
 
 test("subclass defines do not affect superclass ones", function(assert) {
