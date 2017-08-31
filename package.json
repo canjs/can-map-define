@@ -34,17 +34,17 @@
     "main": "can-map-define"
   },
   "dependencies": {
-    "can-compute": "^3.1.0-pre.9",
-    "can-event": "^3.5.0-pre.2",
-    "can-list": "^3.1.0-pre.9",
-    "can-map": "^3.1.0-pre.10",
-    "can-util": "^3.9.0-pre.4"
+    "can-compute": "^3.1.0",
+    "can-event": "^3.5.0",
+    "can-list": "^3.1.0",
+    "can-map": "^3.1.0",
+    "can-util": "^3.9.0"
   },
   "devDependencies": {
     "bit-docs": "0.0.7",
-    "can-component": "^3.1.0-pre.0",
-    "can-route": "^3.1.0-pre.2",
-    "can-stache": "^3.1.0-pre.4",
+    "can-component": "^3.1.0",
+    "can-route": "^3.1.0",
+    "can-stache": "^3.1.0",
     "done-serve": "^0.2.5",
     "donejs-cli": "^0.9.5",
     "generator-donejs": "^1.0.7",
