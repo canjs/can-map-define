@@ -41,7 +41,7 @@
     "can-util": "^3.9.0"
   },
   "devDependencies": {
-    "bit-docs": "0.0.7",
+    "bit-docs": "0.0.8-0",
     "can-component": "^3.1.0",
     "can-route": "^3.1.0",
     "can-stache": "^3.1.0",
