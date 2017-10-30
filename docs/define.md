@@ -1,5 +1,6 @@
 @module {Object} can-map-define can-map-define
-@parent can-legacy
+@parent can-observables
+@collection can-legacy
 @package ../package.json
 
 Defines the
