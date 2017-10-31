@@ -233,10 +233,6 @@ define.types = {
 		}
 		return true;
 	},
-	/**
-	 * Implements HTML-style boolean logic for attribute strings, where
-	 * any string, including "", is truthy.
-	 */
 	'htmlbool': function(val) {
 		return typeof val === "string" || !!val;
 	},
