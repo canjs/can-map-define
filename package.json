@@ -49,7 +49,7 @@
     "detect-cyclic-packages": "^1.1.0",
     "done-serve": "^0.2.5",
     "donejs-cli": "^0.9.5",
-    "generator-donejs": "^1.0.7",
+    "generator-donejs": "^2.0.0",
     "jshint": "^2.9.4",
     "steal": "^1.2.9",
     "steal-qunit": "^1.0.1",
