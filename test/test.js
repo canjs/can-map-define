@@ -1,1 +1,1 @@
-import '../can-map-define_test';
+require('../can-map-define_test');

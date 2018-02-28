@@ -1,8 +1,8 @@
 var dev = require('can-util/js/dev/dev');
 var extend = require('can-util/js/assign/assign');
 var isPlainObject = require('can-util/js/is-plain-object/is-plain-object');
-var canEvent = require('can-event');
-var batch = require('can-event/batch/batch');
+var mapEventsMixin = require('can-event-queue/map/map');
+var queues = require('can-queues');
 var mapHelpers = require('can-map/map-helpers');
 var CanMap = require('can-map');
 var compute = require('can-compute');
@@ -136,10 +136,7 @@ proto.__set = function(prop, value, current, success, error) {
 			// the error itself and we dont want to trigger
 			// the event twice. :)
 			if (stub !== false) {
-				canEvent.trigger(self, 'error', [
-				prop,
-				errors
-			], true);
+				mapEventsMixin.dispatch.call(self, 'error', [ prop, errors ], true);
 			}
 			return false;
 		},
@@ -152,7 +149,7 @@ proto.__set = function(prop, value, current, success, error) {
 		// call the setter, if returned value is undefined,
 		// this means the setter is async so we
 		// do not call update property and return right away
-		batch.start();
+		queues.batch.start();
 		var setterCalled = false,
 
 			setValue = setter.call(this, value, function(value) {
@@ -174,7 +171,7 @@ proto.__set = function(prop, value, current, success, error) {
 				this._computedAttrs[prop].compute(setValue);
 			}
 
-			batch.stop();
+			queues.batch.stop();
 			return;
 		}
 		// if it took a setter and returned nothing, don't set the value
@@ -184,7 +181,7 @@ proto.__set = function(prop, value, current, success, error) {
 				dev.warn('can/map/define: Setter "' + prop + '" did not return a value or call the setter callback.');
 			}, dev.warnTimeout);
 			//!steal-remove-end
-			batch.stop();
+			queues.batch.stop();
 			return;
 		} else {
 			if (!setterCalled) {
@@ -195,7 +192,7 @@ proto.__set = function(prop, value, current, success, error) {
 					success,
 					errorCallback);
 			}
-			batch.stop();
+			queues.batch.stop();
 			return this;
 		}
 
@@ -299,16 +296,16 @@ proto.__remove = function(prop, current) {
 	var remove = getPropDefineBehavior("remove", prop, this.define),
 		res;
 	if (remove) {
-		batch.start();
+		queues.batch.start();
 		res = remove.call(this, current);
 
 		if (res === false) {
-			batch.stop();
+			queues.batch.stop();
 			return;
 		} else {
 
 			res = oldRemove.call(this, prop, current);
-			batch.stop();
+			queues.batch.stop();
 			return res;
 		}
 	}
