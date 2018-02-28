@@ -10,7 +10,7 @@ require('./can-map-define');
 QUnit.module('can/map/define');
 
 // remove, type, default
-test('basics set', function() {
+QUnit.test('basics set', function() {
 	var Defined = CanMap.extend({
 		define: {
 			prop: {
@@ -43,7 +43,7 @@ test('basics set', function() {
 
 });
 
-test("basics remove", function() {
+QUnit.test("basics remove", function() {
 	var ViewModel = CanMap.extend({
 		define: {
 			makeId: {
@@ -102,7 +102,8 @@ test("basics remove", function() {
 
 });
 
-test("basics get", function() {
+QUnit.test("basics get", function(assert) {
+	var done = assert.async();
 
 	var Person = CanMap.extend({
 		define: {
@@ -114,12 +115,8 @@ test("basics get", function() {
 		}
 	});
 
-	var p = new Person({
-		first: "Justin",
-		last: "Meyer"
-	});
-
-	equal(p.attr("fullName"), "Justin Meyer", "sync getter works");
+	var p = new Person({ first: "Justin", last: "Meyer" });
+	assert.equal(p.attr("fullName"), "Justin Meyer", "sync getter works");
 
 	var Adder = CanMap.extend({
 		define: {
@@ -134,33 +131,34 @@ test("basics get", function() {
 		}
 	});
 
-	var a = new Adder({
-			num: 1
-		}),
-		callbackVals = [
-			[2, undefined, function() {
+	var callbackCount = 0;
+	var a = new Adder({ num: 1 });
+	var callbackVals = [
+		{
+			newVal: 2,
+			oldVal: undefined,
+			next: function next() {
 				a.attr("num", 2);
-			}],
-			[3, 2, function() {
-				start();
-			}]
-		],
-		callbackCount = 0;
+			}
+		},
+		{
+			newVal: 3,
+			oldVal: 2,
+			next: done
+		}
+	];
 
 	a.bind("more", function(ev, newVal, oldVal) {
 		var vals = callbackVals[callbackCount++];
-		equal(newVal, vals[0], "newVal is correct");
-		equal(a.attr("more"), vals[0], "attr value is correct");
 
-		equal(oldVal, vals[1], "oldVal is correct");
-
-		setTimeout(vals[2], 10);
+		assert.equal(newVal, vals.newVal, "newVal is correct");
+		assert.equal(a.attr("more"), vals.newVal, "attr value is correct");
+		assert.equal(oldVal, vals.oldVal, "oldVal is correct");
+		setTimeout(vals.next, 10);
 	});
-
-	stop();
 });
 
-test("basic type", function() {
+QUnit.test("basic type", function() {
 
 	expect(6);
 
@@ -209,7 +207,7 @@ test("basic type", function() {
 
 });
 
-test("basic Type", function() {
+QUnit.test("basic Type", function() {
 	var Foo = function(name) {
 		this.name = name;
 	};
@@ -238,7 +236,7 @@ test("basic Type", function() {
 
 });
 
-test("type converters", function() {
+QUnit.test("type converters", function() {
 
 	var Typer = CanMap.extend({
 		define: {
@@ -292,7 +290,7 @@ test("type converters", function() {
 });
 
 
-test("basics value", function() {
+QUnit.test("basics value", function() {
 	var Typer = CanMap.extend({
 		define: {
 			prop: {
@@ -323,7 +321,7 @@ test("basics value", function() {
 
 });
 
-test("basics Value", function() {
+QUnit.test("basics Value", function() {
 
 	var Typer = CanMap.extend({
 		define: {
@@ -343,7 +341,7 @@ test("basics Value", function() {
 });
 
 
-test("setter with no arguments and returns undefined does the default behavior, the setter is for side effects only", function() {
+QUnit.test("setter with no arguments and returns undefined does the default behavior, the setter is for side effects only", function() {
 
 	var Typer = CanMap.extend({
 		define: {
@@ -367,7 +365,7 @@ test("setter with no arguments and returns undefined does the default behavior, 
 
 });
 
-test("type happens before the set", function() {
+QUnit.test("type happens before the set", function() {
 	var MyMap = CanMap.extend({
 		define: {
 			prop: {
@@ -386,7 +384,7 @@ test("type happens before the set", function() {
 	equal(map.attr("prop"), 6, "number");
 });
 
-test("getter and setter work", function() {
+QUnit.test("getter and setter work", function() {
 	expect(5);
 	var Paginate = CanMap.extend({
 		define: {
@@ -422,7 +420,7 @@ test("getter and setter work", function() {
 
 });
 
-test("getter with initial value", function() {
+QUnit.test("getter with initial value", function() {
 
 	var comp = compute(1);
 
@@ -442,6 +440,7 @@ test("getter with initial value", function() {
 	});
 
 	var g = new Grabber();
+
 	// This assertion doesn't mean much.  It's mostly testing
 	// that there were no errors.
 	equal(g.attr("vals").length, 0, "zero items in array");
@@ -449,7 +448,7 @@ test("getter with initial value", function() {
 });
 
 
-test("serialize basics", function() {
+QUnit.test("serialize basics", function() {
 	var MyMap = CanMap.extend({
 		define: {
 			name: {
@@ -463,7 +462,7 @@ test("serialize basics", function() {
 			locationIds: {
 				get: function() {
 					var ids = [];
-					this.attr('locations').each(function(location) {
+					this.attr('locations').forEach(function(location) {
 						ids.push(location.id);
 					});
 					return ids;
@@ -510,7 +509,7 @@ test("serialize basics", function() {
 
 });
 
-test("serialize context", function() {
+QUnit.test("serialize context", function() {
 	var context, serializeContext;
 	var MyMap = CanMap.extend({
 		define: {
@@ -534,7 +533,7 @@ test("serialize context", function() {
 	equal(serializeContext, map);
 });
 
-test("methods contexts", function() {
+QUnit.test("methods contexts", function() {
 	var contexts = {};
 	var MyMap = CanMap.extend({
 		define: {
@@ -581,7 +580,7 @@ test("methods contexts", function() {
 	equal(contexts.type, map);
 });
 
-test("value generator is not called if default passed", function() {
+QUnit.test("value generator is not called if default passed", function() {
 	var TestMap = CanMap.extend({
 		define: {
 			foo: {
@@ -599,7 +598,7 @@ test("value generator is not called if default passed", function() {
 	equal(tm.attr('foo'), 'baz');
 });
 
-test("Value generator can read other properties", function() {
+QUnit.test("Value generator can read other properties", function() {
 	var Map = CanMap.extend({
 		letters: 'ABC',
 		numbers: [1, 2, 3],
@@ -678,7 +677,7 @@ test("Value generator can read other properties", function() {
 		prefix + 'define plugin style generated default property definition');
 });
 
-test('default behaviors with "*" work for attributes', function() {
+QUnit.test('default behaviors with "*" work for attributes', function() {
 	expect(9);
 	var DefaultMap = CanMap.extend({
 		define: {
@@ -718,7 +717,7 @@ test('default behaviors with "*" work for attributes', function() {
 	equal(serializedMap['*'], undefined, '"*" is not a value in serialized object');
 });
 
-test('models properly serialize with default behaviors', function() {
+QUnit.test('models properly serialize with default behaviors', function() {
 	var DefaultMap = CanMap.extend({
 		define: {
 			name: {
@@ -744,7 +743,7 @@ test('models properly serialize with default behaviors', function() {
 	equal(serializedMap.shirt, 'blue', 'shirt exists');
 });
 
-test("nested define", function() {
+QUnit.test("nested define", function() {
 	var nailedIt = 'Nailed it';
 	var Example = CanMap.extend({}, {
 		define: {
@@ -796,7 +795,7 @@ test("nested define", function() {
 	ok(nested.attr('examples.two.deep') instanceof Example);
 });
 
-test('Can make an attr alias a compute (#1470)', 9, function() {
+QUnit.test('Can make an attr alias a compute (#1470)', 9, function() {
 	var computeValue = compute(1);
 	var GetMap = CanMap.extend({
 		define: {
@@ -863,7 +862,7 @@ test('Can make an attr alias a compute (#1470)', 9, function() {
 
 });
 
-test('setting a value of a property with type "compute" triggers change events', function() {
+QUnit.test('setting a value of a property with type "compute" triggers change events', function() {
 
 	var handler;
 	var message = 'The change event passed the correct {prop} when set with {method}';
@@ -907,7 +906,7 @@ test('setting a value of a property with type "compute" triggers change events',
 	m1.unbind('computed', handler);
 });
 
-test('replacing the compute on a property with type "compute"', function() {
+QUnit.test('replacing the compute on a property with type "compute"', function() {
 	var compute1 = compute(0);
 	var compute2 = compute(1);
 
@@ -934,7 +933,7 @@ test('replacing the compute on a property with type "compute"', function() {
 
 // The old attributes plugin interferes severly with this test.
 // TODO remove this condition when taking the plugins out of the main repository
-test('value and get (#1521)', function() {
+QUnit.test('value and get (#1521)', function() {
 	var MyMap = CanMap.extend({
 		define: {
 			data: {
@@ -958,7 +957,7 @@ test('value and get (#1521)', function() {
 });
 
 
-test("One event on getters (#1585)", function() {
+QUnit.test("One event on getters (#1585)", function() {
 
 	var AppState = CanMap.extend({
 		define: {
@@ -996,7 +995,7 @@ test("One event on getters (#1585)", function() {
 	equal(personEvents, 2);
 });
 
-test('Can read a defined property with a set/get method (#1648)', function() {
+QUnit.test('Can read a defined property with a set/get method (#1648)', function() {
 	// Problem: "get" is not passed the correct "lastSetVal"
 	// Problem: Cannot read the value of "foo"
 
@@ -1023,7 +1022,7 @@ test('Can read a defined property with a set/get method (#1648)', function() {
 	equal(map.attr('foo'), 'baz', 'Calling .attr(\'foo\') returned the correct value');
 });
 
-test('Can bind to a defined property with a set/get method (#1648)', 3, function() {
+QUnit.test('Can bind to a defined property with a set/get method (#1648)', 3, function() {
 	// Problem: "get" is not called before and after the "set"
 	// Problem: Function bound to "foo" is not called
 	// Problem: Cannot read the value of "foo"
@@ -1056,7 +1055,7 @@ test('Can bind to a defined property with a set/get method (#1648)', 3, function
 });
 
 
-test("type converters handle null and undefined in expected ways (1693)", function() {
+QUnit.test("type converters handle null and undefined in expected ways (1693)", function() {
 
 	var Typer = CanMap.extend({
 		define: {
@@ -1125,7 +1124,7 @@ test("type converters handle null and undefined in expected ways (1693)", functi
 
 });
 
-test('Initial value does not call getter', function() {
+QUnit.test('Initial value does not call getter', function() {
 	expect(0);
 
 	var Map = CanMap.extend({
@@ -1144,7 +1143,7 @@ test('Initial value does not call getter', function() {
 	});
 });
 
-test("getters produce change events", function() {
+QUnit.test("getters produce change events", function() {
 	var Map = CanMap.extend({
 		define: {
 			count: {
@@ -1164,7 +1163,7 @@ test("getters produce change events", function() {
 	map.attr("count", 22);
 });
 
-test("Asynchronous virtual properties cause extra recomputes (#1915)", function() {
+QUnit.test("Asynchronous virtual properties cause extra recomputes (#1915)", function() {
 
 	stop();
 
@@ -1206,7 +1205,7 @@ test("Asynchronous virtual properties cause extra recomputes (#1915)", function(
 });
 
 
-test("double get in a compute (#2230)", function() {
+QUnit.test("double get in a compute (#2230)", function() {
 	var VM = CanMap.extend({
 		define: {
 			names: {
@@ -1228,7 +1227,7 @@ test("double get in a compute (#2230)", function() {
 
 });
 
-test("nullish values are not converted for Type", function(assert) {
+QUnit.test("nullish values are not converted for Type", function(assert) {
 
 	var VM = CanMap.extend({
 		define: {
@@ -1262,7 +1261,7 @@ test("nullish values are not converted for Type", function(assert) {
 	assert.equal(vm.attr("map"), null, "notype is null");
 });
 
-test("Wildcard serialize doesn't apply to getter properties (#4)", function() {
+QUnit.test("Wildcard serialize doesn't apply to getter properties (#4)", function() {
 	var VM = CanMap.extend({
 		define: {
 			explicitlySerialized: {
@@ -1291,7 +1290,7 @@ test("Wildcard serialize doesn't apply to getter properties (#4)", function() {
 	});
 });
 
-test("compute props can be set to null or undefined (#2372)", function(assert) {
+QUnit.test("compute props can be set to null or undefined (#2372)", function(assert) {
 	var VM = CanMap.extend({ define: {
 	    foo: { type: 'compute' }
 	}});
@@ -1302,7 +1301,7 @@ test("compute props can be set to null or undefined (#2372)", function(assert) {
 	assert.equal(vmUndef.foo, undefined, "foo is null, no error thrown");
 });
 
-test("can inherit computes from another map (#2)", 4, function(){
+QUnit.test("can inherit computes from another map (#2)", 4, function(){
  		var string1 = 'a string';
  		var string2 = 'another string';
 
@@ -1347,7 +1346,7 @@ test("can inherit computes from another map (#2)", 4, function(){
 
  	});
 
-test("can inherit primitive values from another map (#2)", function(){
+QUnit.test("can inherit primitive values from another map (#2)", function(){
 	var string1 = 'a';
 	var string2 = 'b';
 
@@ -1380,7 +1379,7 @@ test("can inherit primitive values from another map (#2)", function(){
 
 });
 
-test("can inherit object values from another map (#2)", function(){
+QUnit.test("can inherit object values from another map (#2)", function(){
 	var object1 = {a: 'a'};
 	var object2 = {b: 'b'};
 
@@ -1421,7 +1420,7 @@ test("can inherit object values from another map (#2)", function(){
 });
 
 
-test("can set properties to undefined", function(){
+QUnit.test("can set properties to undefined", function(){
 	var MyMap = CanMap.extend({
 		define: {
 			foo: {
@@ -1441,7 +1440,7 @@ test("can set properties to undefined", function(){
 	equal(typeof map.attr('foo'), 'undefined', 'foo should be undefined');
 });
 
-test("subclass defines do not affect superclass ones", function(assert) {
+QUnit.test("subclass defines do not affect superclass ones", function(assert) {
 	var VM = CanMap.extend({
 		define: {
 			foo: {
@@ -1488,7 +1487,7 @@ test("subclass defines do not affect superclass ones", function(assert) {
 	assert.equal(new VM2c().attr("foo"), "barthud", "correct define on child class object with extending define");
 });
 
-test("value function not set on constructor defaults", function(){
+QUnit.test("value function not set on constructor defaults", function(){
 	var MyMap = CanMap.extend({
 		define: {
 			propA: {
