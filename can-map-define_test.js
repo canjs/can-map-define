@@ -4,10 +4,11 @@ var string = require('can-util/js/string/string');
 var CanMap = require('can-map');
 var List = require('can-list');
 var compute = require('can-compute');
+var canReflect = require('can-reflect');
 
 require('./can-map-define');
 
-QUnit.module('can/map/define');
+QUnit.module('can-map-define');
 
 // remove, type, default
 QUnit.test('basics set', function() {
@@ -1504,4 +1505,52 @@ QUnit.test("value function not set on constructor defaults", function(){
 	notEqual(MyMap.defaultGenerators.propA, undefined, 'Generator function set on defaultGenerators');
 	equal(map.attr("propA"), 1, 'Instance value set properly'); //this is mainly so that CI doesn't complain about unused variable
 
+});
+
+QUnit.test("can.hasKey", function() {
+	var Parent = CanMap.extend({
+		define: {
+			parentProp: {
+				type: "*"
+			},
+
+			parentDerivedProp: {
+				get: function() {
+					if (this.parentProp) {
+						return "parentDerived";
+					}
+				}
+			}
+		}
+	});
+
+	var VM = Parent.extend({
+		define: {
+			prop: {
+				type: "*"
+			},
+
+			derivedProp: {
+				get: function() {
+					if (this.prop) {
+						return "derived";
+					}
+				}
+			}
+		}
+	});
+
+	var vm = new VM();
+
+	// hasKey
+	equal(canReflect.hasKey(vm, "prop"), true, "vm.hasKey('prop') true");
+	equal(canReflect.hasKey(vm, "derivedProp"), true, "vm.hasKey('derivedProp') true");
+
+	equal(canReflect.hasKey(vm, "parentProp"), true, "vm.hasKey('parentProp') true");
+	equal(canReflect.hasKey(vm, "parentDerivedProp"), true, "vm.hasKey('parentDerivedProp') true");
+
+	equal(canReflect.hasKey(vm, "anotherProp"), false, "vm.hasKey('anotherProp') false");
+
+	vm.attr('lateProp', 'something');
+	equal(canReflect.hasKey(vm, "lateProp"), true, "vm.hasKey('lateProp') true");
 });
