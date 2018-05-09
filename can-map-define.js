@@ -6,6 +6,7 @@ var queues = require('can-queues');
 var mapHelpers = require('can-map/map-helpers');
 var CanMap = require('can-map');
 var compute = require('can-compute');
+var canReflect = require('can-reflect');
 require('can-list');
 
 var define = {}; // jshint ignore:line
@@ -66,7 +67,6 @@ mapHelpers.define = function(Map, baseDefine) {
 		}
 	}
 };
-
 
 var oldSetupDefaults = CanMap.prototype._setupDefaults;
 CanMap.prototype._setupDefaults = function(obj) {
@@ -367,5 +367,13 @@ proto.serialize = function(property) {
 	}
 	return serialized;
 };
+
+canReflect.assignSymbols(proto, {
+	"can.hasKey": function(key) {
+		var defined = this.define && key in this.define;
+		var exists = this._data && key in this._data;
+		return defined || exists;
+	}
+});
 
 module.exports = define;
