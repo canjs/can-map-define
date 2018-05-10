@@ -1521,6 +1521,10 @@ QUnit.test("can.hasKey", function() {
 					}
 				}
 			}
+		},
+
+		parentFunction: function() {
+			return "parentFunction return value";
 		}
 	});
 
@@ -1537,6 +1541,10 @@ QUnit.test("can.hasKey", function() {
 					}
 				}
 			}
+		},
+
+		aFunction: function() {
+			return "aFunction return value";
 		}
 	});
 
@@ -1550,6 +1558,9 @@ QUnit.test("can.hasKey", function() {
 	equal(canReflect.hasKey(vm, "parentDerivedProp"), true, "vm.hasKey('parentDerivedProp') true");
 
 	equal(canReflect.hasKey(vm, "anotherProp"), false, "vm.hasKey('anotherProp') false");
+
+	equal(canReflect.hasKey(vm, "aFunction"), true, "vm.hasKey('aFunction') true");
+	equal(canReflect.hasKey(vm, "parentFunction"), true, "vm.hasKey('parentFunction') true");
 
 	vm.attr('lateProp', 'something');
 	equal(canReflect.hasKey(vm, "lateProp"), true, "vm.hasKey('lateProp') true");
