@@ -371,8 +371,9 @@ proto.serialize = function(property) {
 canReflect.assignSymbols(proto, {
 	"can.hasKey": function(key) {
 		var defined = this.define && key in this.define;
-		var exists = this._data && key in this._data;
-		return defined || exists;
+		var dataExists = this._data && key in this._data;
+		var propExists = key in this;
+		return defined || dataExists || propExists;
 	}
 });
 
