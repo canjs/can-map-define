@@ -39,7 +39,7 @@
     "can-event-queue": "^1.0.1",
     "can-list": "^4.0.0",
     "can-map": "^4.0.1",
-    "can-queues": "^1.0.1",
+    "can-queues": "^1.1.0",
     "can-reflect": "^1.15.2",
     "can-util": "^3.9.0"
   },
