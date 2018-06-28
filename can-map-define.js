@@ -37,9 +37,11 @@ mapHelpers.define = function(Map, baseDefine) {
 		extend(definitions, defines);
 	}
 	//!steal-remove-start
-	if (Map.define) {
-		dev.warn("The define property should be on the map's prototype properties, " +
-			"not the static properties.");
+	if (process.env.NODE_ENV !== 'production') {
+		if (Map.define) {
+			dev.warn("The define property should be on the map's prototype properties, " +
+				"not the static properties.");
+		}
 	}
 	//!steal-remove-end
 	Map.defaultGenerators = {};
@@ -128,7 +130,9 @@ proto.__set = function(prop, value, current, success, error) {
 	// check if there's a setter
 	var errorCallback = function(errors) {
 			//!steal-remove-start
-			clearTimeout(asyncTimer);
+			if (process.env.NODE_ENV !== 'production') {
+				clearTimeout(asyncTimer);
+			}
 			//!steal-remove-end
 
 			var stub = error && error.call(self, errors);
@@ -161,7 +165,9 @@ proto.__set = function(prop, value, current, success, error) {
 
 				setterCalled = true;
 				//!steal-remove-start
-				clearTimeout(asyncTimer);
+				if (process.env.NODE_ENV !== 'production') {
+					clearTimeout(asyncTimer);
+				}
 				//!steal-remove-end
 			}, errorCallback, getter ? this._computedAttrs[prop].compute.computeInstance.lastSetValue.get() : current);
 		if (getter) {
@@ -177,9 +183,11 @@ proto.__set = function(prop, value, current, success, error) {
 		// if it took a setter and returned nothing, don't set the value
 		else if (setValue === undefined && !setterCalled && setter.length > 1) {
 			//!steal-remove-start
-			asyncTimer = setTimeout(function() {
-				dev.warn('can/map/define: Setter "' + prop + '" did not return a value or call the setter callback.');
-			}, dev.warnTimeout);
+			if (process.env.NODE_ENV !== 'production') {
+				asyncTimer = setTimeout(function() {
+					dev.warn('can/map/define: Setter "' + prop + '" did not return a value or call the setter callback.');
+				}, dev.warnTimeout);
+			}
 			//!steal-remove-end
 			queues.batch.stop();
 			return;
