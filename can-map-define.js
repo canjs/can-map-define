@@ -1,3 +1,5 @@
+"use strict";
+
 var dev = require('can-log/dev/dev');
 var extend = require('can-assign');
 var mapEventsMixin = require('can-event-queue/map/map');
