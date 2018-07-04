@@ -1,6 +1,6 @@
 /* jshint asi: false */
 var QUnit = require('steal-qunit');
-var string = require('can-util/js/string/string');
+var sub = require('can-key/sub/sub');
 var CanMap = require('can-map');
 var List = require('can-list');
 var compute = require('can-compute');
@@ -874,9 +874,9 @@ QUnit.test('setting a value of a property with type "compute" triggers change ev
 				prop: 'newVal',
 				method: method
 			};
-			equal(newVal, expectedNewVal, string.sub(message, subs));
+			equal(newVal, expectedNewVal, sub(message, subs));
 			subs.prop = 'oldVal';
-			equal(oldVal, expectedOldVal, string.sub(message, subs));
+			equal(oldVal, expectedOldVal, sub(message, subs));
 		};
 	};
 

@@ -1,7 +1,7 @@
 "use strict";
-var dev = require('can-util/js/dev/dev');
-var extend = require('can-util/js/assign/assign');
-var isPlainObject = require('can-util/js/is-plain-object/is-plain-object');
+
+var dev = require('can-log/dev/dev');
+var extend = require('can-assign');
 var mapEventsMixin = require('can-event-queue/map/map');
 var queues = require('can-queues');
 var mapHelpers = require('can-map/map-helpers');
@@ -293,7 +293,7 @@ proto.__type = function(value, prop) {
 
 	}
 	// If we pass in a object with define
-	else if (isPlainObject(newValue) && newValue.define) {
+	else if (canReflect.isPlainObject(newValue) && newValue.define) {
 		newValue = CanMap.extend(newValue);
 		newValue = new newValue();
 	}
