@@ -1,3 +1,4 @@
+"use strict";
 var dev = require('can-util/js/dev/dev');
 var extend = require('can-util/js/assign/assign');
 var isPlainObject = require('can-util/js/is-plain-object/is-plain-object');
