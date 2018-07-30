@@ -5,7 +5,6 @@ var CanMap = require('can-map');
 var List = require('can-list');
 var compute = require('can-compute');
 var canReflect = require('can-reflect');
-var canSymbol = require("can-symbol");
 
 require('./can-map-define');
 
@@ -1309,49 +1308,49 @@ QUnit.test("compute props can be set to null or undefined (#2372)", function(ass
 });
 
 QUnit.test("can inherit computes from another map (#2)", 4, function(){
- 		var string1 = 'a string';
- 		var string2 = 'another string';
+	var string1 = 'a string';
+	var string2 = 'another string';
 
- 		var MapA = CanMap.extend({
- 			define: {
- 				propA: {
- 					get: function() {
- 						return string1;
- 					}
- 				},
- 				propB: {
- 					get: function() {
- 						return string1;
- 					},
- 					set: function(newVal) {
- 						equal(newVal, string1, 'set was called');
- 					}
- 				}
- 			}
- 		});
- 		var MapB = MapA.extend({
- 			define: {
- 				propC: {
- 					get: function() {
- 						return string2;
- 					}
- 				},
- 				propB: {
- 					get: function() {
- 						return string2;
- 					}
- 				}
- 			}
- 		});
+	var MapA = CanMap.extend({
+		define: {
+			propA: {
+				get: function() {
+					return string1;
+				}
+			},
+			propB: {
+				get: function() {
+					return string1;
+				},
+				set: function(newVal) {
+					equal(newVal, string1, 'set was called');
+				}
+			}
+		}
+	});
+	var MapB = MapA.extend({
+		define: {
+			propC: {
+				get: function() {
+					return string2;
+				}
+			},
+			propB: {
+				get: function() {
+					return string2;
+				}
+			}
+		}
+	});
 
-		var map = new MapB();
+	var map = new MapB();
 
-		equal(map.attr('propC'), string2, 'props only in the child have the correct values');
- 		equal(map.attr('propB'), string2, 'props in both have the child values');
- 		equal(map.attr('propA'), string1, 'props only in the parent have the correct values');
-		map.attr('propB', string1);
+	equal(map.attr('propC'), string2, 'props only in the child have the correct values');
+	equal(map.attr('propB'), string2, 'props in both have the child values');
+	equal(map.attr('propA'), string1, 'props only in the parent have the correct values');
+	map.attr('propB', string1);
 
- 	});
+});
 
 QUnit.test("can inherit primitive values from another map (#2)", function(){
 	var string1 = 'a';
@@ -1622,11 +1621,10 @@ QUnit.test("can.getOwnEnumerableKeys", function() {
 	});
 
 	var vm = new VM();
-	var getOwnEnumerableKeysSymbol = canSymbol.for("can.getOwnEnumerableKeys");
-	// getOwnEnumerableKeys for inherited defined props
-	deepEqual( vm[getOwnEnumerableKeysSymbol](), [ "enumerableProp", "enumByDefault", "parentEnum", "parentEnumByDefault" ], "vm.getOwnEnumerableKeys()");
+	// getOwnEnumerableKeys for defined props, including copied from Parent
+	deepEqual( canReflect.getOwnEnumerableKeys(vm), [ "enumerableProp", "enumByDefault", "parentEnum", "parentEnumByDefault" ], "vm.getOwnEnumerableKeys()");
 
 	vm.attr('lateProp', true);
-	deepEqual( vm[getOwnEnumerableKeysSymbol](), [ "enumerableProp", "enumByDefault", "parentEnum", "parentEnumByDefault", "lateProp" ], "vm.getOwnEnumerableKeys() with late prop");
+	deepEqual( canReflect.getOwnEnumerableKeys(vm), [ "enumerableProp", "enumByDefault", "parentEnum", "parentEnumByDefault", "lateProp" ], "vm.getOwnEnumerableKeys() with late prop");
 
 });
