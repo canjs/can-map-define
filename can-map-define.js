@@ -383,6 +383,28 @@ canReflect.assignSymbols(proto, {
 		var dataExists = this._data && key in this._data;
 		var propExists = key in this;
 		return defined || dataExists || propExists;
+	},
+	"can.getOwnEnumerableKeys": function() {
+		// what keys/props do i care about?
+		// handle inheritance?
+		// if no serialize attribute, what's the default?
+		// key vs prop vs attribute (random q)
+
+		var define = this.define
+		var defineKeys = Object.keys(this.define);
+		var dataKeys = Object.keys(this._data);
+		var parentKeys = Object.keys(this);
+		var enumerableKeys = []
+
+		if (defineKeys.length) {
+			defineKeys.forEach(function(key) {
+				if (define[key]["serialize"] === undefined || define[key]["serialize"] === true) {
+					enumerableKeys.push(key)
+				}
+			});
+		}
+
+		return enumerableKeys;
 	}
 });
 

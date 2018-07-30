@@ -5,6 +5,7 @@ var CanMap = require('can-map');
 var List = require('can-list');
 var compute = require('can-compute');
 var canReflect = require('can-reflect');
+var canSymbol = require("can-symbol");
 
 require('./can-map-define');
 
@@ -1564,4 +1565,48 @@ QUnit.test("can.hasKey", function() {
 
 	vm.attr('lateProp', 'something');
 	equal(canReflect.hasKey(vm, "lateProp"), true, "vm.hasKey('lateProp') true");
+});
+
+QUnit.test("can.getOwnEnumerableKeys", function() {
+	var ParentMap = CanMap.extend({
+		define: {
+			parentNoEnum: {
+				serialize: false,
+				value: 'parent_no'
+			},
+
+			parentEnum: {
+				serialize: true,
+				value: 'parent_yes'
+			},
+
+			parentEnumByDefault: {
+				value: 'parent_maybe'
+			}
+		}
+	});
+
+		var VM = ParentMap.extend({
+		define: {
+			notEnumerable: {
+				serialize: false,
+				value: 'no'
+			},
+
+			enumerableProp: {
+				serialize: true,
+				value: 'yes'
+			},
+
+			enumByDefault: {
+				value: 'maybe'
+			}
+		}
+	});
+
+	var vm = new VM();
+	var getOwnEnumerableKeysSymbol = canSymbol.for("can.getOwnEnumerableKeys")
+	equal(vm.attr('notEnumerable'), 'no', 'value matches');
+	// getOwnEnumerableKeys for inherited defined props
+	deepEqual( vm[getOwnEnumerableKeysSymbol](), [ "enumerableProp", "enumByDefault", "parentEnum", "parentEnumByDefault" ], "vm.getOwnEnumerableKeys()");
 });

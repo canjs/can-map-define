@@ -37,12 +37,13 @@
   "dependencies": {
     "can-assign": "^1.1.1",
     "can-compute": "^4.0.3",
-    "can-log": "^1.0.0",
     "can-event-queue": "^1.0.1",
     "can-list": "^4.0.0",
+    "can-log": "^1.0.0",
     "can-map": "^4.0.1",
     "can-queues": "^1.0.1",
-    "can-reflect": "^1.15.2"
+    "can-reflect": "^1.15.2",
+    "can-symbol": "^1.6.1"
   },
   "devDependencies": {
     "bit-docs": "0.0.7",
