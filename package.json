@@ -41,6 +41,7 @@
     "can-list": "^4.0.0",
     "can-log": "^1.0.0",
     "can-map": "^4.0.1",
+    "can-observation-recorder": "^1.2.0",
     "can-queues": "^1.0.1",
     "can-reflect": "^1.15.2",
     "can-symbol": "^1.6.1"

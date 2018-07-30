@@ -188,7 +188,7 @@ QUnit.test("basic type", function() {
 
 
 	var t = new Typer();
-	deepEqual(CanMap.keys(t), [], "no keys");
+	deepEqual(CanMap.keys(t), ["arrayWithAddedItem", "listWithAddedItem"], "defined keys");
 
 	var array = [];
 	t.attr("arrayWithAddedItem", array);
@@ -1062,19 +1062,24 @@ QUnit.test("type converters handle null and undefined in expected ways (1693)", 
 	var Typer = CanMap.extend({
 		define: {
 			date: {
-				type: 'date'
+				type: 'date',
+				value: 'Mon Jul 30 2018 11:57:14 GMT-0500 (Central Daylight Time)'
 			},
 			string: {
-				type: 'string'
+				type: 'string',
+				value: 'mudd'
 			},
 			number: {
-				type: 'number'
+				type: 'number',
+				value: 42
 			},
 			'boolean': {
-				type: 'boolean'
+				type: 'boolean',
+				value: false
 			},
 			htmlbool: {
-				type: 'htmlbool'
+				type: 'htmlbool',
+				value: true
 			},
 			leaveAlone: {
 				type: '*'
@@ -1581,7 +1586,13 @@ QUnit.test("can.getOwnEnumerableKeys", function() {
 			},
 
 			parentEnumByDefault: {
-				value: 'parent_maybe'
+				value: 'maybe'
+			},
+
+			parentEnumGetter: {
+				get: function () {
+					return 'parent_get';
+				}
 			}
 		}
 	});
@@ -1600,13 +1611,22 @@ QUnit.test("can.getOwnEnumerableKeys", function() {
 
 			enumByDefault: {
 				value: 'maybe'
+			},
+
+			enumGetter: {
+				get: function () {
+					return 'got';
+				}
 			}
 		}
 	});
 
 	var vm = new VM();
-	var getOwnEnumerableKeysSymbol = canSymbol.for("can.getOwnEnumerableKeys")
-	equal(vm.attr('notEnumerable'), 'no', 'value matches');
+	var getOwnEnumerableKeysSymbol = canSymbol.for("can.getOwnEnumerableKeys");
 	// getOwnEnumerableKeys for inherited defined props
 	deepEqual( vm[getOwnEnumerableKeysSymbol](), [ "enumerableProp", "enumByDefault", "parentEnum", "parentEnumByDefault" ], "vm.getOwnEnumerableKeys()");
+
+	vm.attr('lateProp', true);
+	deepEqual( vm[getOwnEnumerableKeysSymbol](), [ "enumerableProp", "enumByDefault", "parentEnum", "parentEnumByDefault", "lateProp" ], "vm.getOwnEnumerableKeys() with late prop");
+
 });
