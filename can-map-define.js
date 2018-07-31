@@ -405,6 +405,13 @@ canReflect.assignSymbols(proto, {
 		var definedKeys = keysForDefinition(this.define);
 		var dataKeys = keysForDefinition(this._data);
 
+		var enumerable = this.constructor.enumerable;
+		if (enumerable) {
+			dataKeys = dataKeys.filter(function(key) {
+				return enumerable[key] !== false;
+			});
+		}
+
 		var i, newKey;
 		for(i=0; i<dataKeys.length; i++) {
 			newKey = dataKeys[i];
