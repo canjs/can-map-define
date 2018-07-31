@@ -8,9 +8,21 @@ var mapHelpers = require('can-map/map-helpers');
 var CanMap = require('can-map');
 var compute = require('can-compute');
 var canReflect = require('can-reflect');
+var ObservationRecorder = require('can-observation-recorder');
 require('can-list');
 
 var define = {}; // jshint ignore:line
+
+var keysForDefinition = function(definitions) {
+	var keys = [];
+	for(var prop in definitions) {
+		var definition = definitions[prop];
+		if(typeof definition !== "object" || ("serialize" in definition ? !!definition.serialize : !definition.get)) {
+			keys.push(prop);
+		}
+	}
+	return keys;
+};
 
 var getPropDefineBehavior = function(behavior, attr, define) {
 	var prop, defaultProp;
@@ -383,6 +395,26 @@ canReflect.assignSymbols(proto, {
 		var dataExists = this._data && key in this._data;
 		var propExists = key in this;
 		return defined || dataExists || propExists;
+	},
+	"can.getOwnEnumerableKeys": function() {
+		if (!this.__inSetup) {
+			ObservationRecorder.add(this, '__keys');
+		}
+
+		var definedKeys = keysForDefinition(this.define);
+		var dataKeys = keysForDefinition(this._data);
+
+		var i, newKey;
+		for(i=0; i<dataKeys.length; i++) {
+			newKey = dataKeys[i];
+			// add keys that are in _data, but are not in `define`
+			// keys in `define` are in `definedKeys` based on their `serialize` prop
+			if (definedKeys.indexOf(newKey) < 0 && this.define && !this.define[newKey]) {
+				definedKeys.push(dataKeys[i]);
+			}
+		}
+
+		return definedKeys;
 	}
 });
 

@@ -187,7 +187,7 @@ QUnit.test("basic type", function() {
 
 
 	var t = new Typer();
-	deepEqual(CanMap.keys(t), [], "no keys");
+	deepEqual(CanMap.keys(t), ["arrayWithAddedItem", "listWithAddedItem"], "defined keys");
 
 	var array = [];
 	t.attr("arrayWithAddedItem", array);
@@ -1061,19 +1061,24 @@ QUnit.test("type converters handle null and undefined in expected ways (1693)", 
 	var Typer = CanMap.extend({
 		define: {
 			date: {
-				type: 'date'
+				type: 'date',
+				value: 'Mon Jul 30 2018 11:57:14 GMT-0500 (Central Daylight Time)'
 			},
 			string: {
-				type: 'string'
+				type: 'string',
+				value: 'mudd'
 			},
 			number: {
-				type: 'number'
+				type: 'number',
+				value: 42
 			},
 			'boolean': {
-				type: 'boolean'
+				type: 'boolean',
+				value: false
 			},
 			htmlbool: {
-				type: 'htmlbool'
+				type: 'htmlbool',
+				value: true
 			},
 			leaveAlone: {
 				type: '*'
@@ -1303,49 +1308,49 @@ QUnit.test("compute props can be set to null or undefined (#2372)", function(ass
 });
 
 QUnit.test("can inherit computes from another map (#2)", 4, function(){
- 		var string1 = 'a string';
- 		var string2 = 'another string';
+	var string1 = 'a string';
+	var string2 = 'another string';
 
- 		var MapA = CanMap.extend({
- 			define: {
- 				propA: {
- 					get: function() {
- 						return string1;
- 					}
- 				},
- 				propB: {
- 					get: function() {
- 						return string1;
- 					},
- 					set: function(newVal) {
- 						equal(newVal, string1, 'set was called');
- 					}
- 				}
- 			}
- 		});
- 		var MapB = MapA.extend({
- 			define: {
- 				propC: {
- 					get: function() {
- 						return string2;
- 					}
- 				},
- 				propB: {
- 					get: function() {
- 						return string2;
- 					}
- 				}
- 			}
- 		});
+	var MapA = CanMap.extend({
+		define: {
+			propA: {
+				get: function() {
+					return string1;
+				}
+			},
+			propB: {
+				get: function() {
+					return string1;
+				},
+				set: function(newVal) {
+					equal(newVal, string1, 'set was called');
+				}
+			}
+		}
+	});
+	var MapB = MapA.extend({
+		define: {
+			propC: {
+				get: function() {
+					return string2;
+				}
+			},
+			propB: {
+				get: function() {
+					return string2;
+				}
+			}
+		}
+	});
 
-		var map = new MapB();
+	var map = new MapB();
 
-		equal(map.attr('propC'), string2, 'props only in the child have the correct values');
- 		equal(map.attr('propB'), string2, 'props in both have the child values');
- 		equal(map.attr('propA'), string1, 'props only in the parent have the correct values');
-		map.attr('propB', string1);
+	equal(map.attr('propC'), string2, 'props only in the child have the correct values');
+	equal(map.attr('propB'), string2, 'props in both have the child values');
+	equal(map.attr('propA'), string1, 'props only in the parent have the correct values');
+	map.attr('propB', string1);
 
- 	});
+});
 
 QUnit.test("can inherit primitive values from another map (#2)", function(){
 	var string1 = 'a';
@@ -1564,4 +1569,62 @@ QUnit.test("can.hasKey", function() {
 
 	vm.attr('lateProp', 'something');
 	equal(canReflect.hasKey(vm, "lateProp"), true, "vm.hasKey('lateProp') true");
+});
+
+QUnit.test("can.getOwnEnumerableKeys", function() {
+	var ParentMap = CanMap.extend({
+		define: {
+			parentNoEnum: {
+				serialize: false,
+				value: 'parent_no'
+			},
+
+			parentEnum: {
+				serialize: true,
+				value: 'parent_yes'
+			},
+
+			parentEnumByDefault: {
+				value: 'maybe'
+			},
+
+			parentEnumGetter: {
+				get: function () {
+					return 'parent_get';
+				}
+			}
+		}
+	});
+
+		var VM = ParentMap.extend({
+		define: {
+			notEnumerable: {
+				serialize: false,
+				value: 'no'
+			},
+
+			enumerableProp: {
+				serialize: true,
+				value: 'yes'
+			},
+
+			enumByDefault: {
+				value: 'maybe'
+			},
+
+			enumGetter: {
+				get: function () {
+					return 'got';
+				}
+			}
+		}
+	});
+
+	var vm = new VM();
+	// getOwnEnumerableKeys for defined props, including copied from Parent
+	deepEqual( canReflect.getOwnEnumerableKeys(vm), [ "enumerableProp", "enumByDefault", "parentEnum", "parentEnumByDefault" ], "vm.getOwnEnumerableKeys()");
+
+	vm.attr('lateProp', true);
+	deepEqual( canReflect.getOwnEnumerableKeys(vm), [ "enumerableProp", "enumByDefault", "parentEnum", "parentEnumByDefault", "lateProp" ], "vm.getOwnEnumerableKeys() with late prop");
+
 });
