@@ -403,7 +403,7 @@ canReflect.assignSymbols(proto, {
 		}
 
 		var definedKeys = keysForDefinition(this.define);
-		var dataKeys = keysForDefinition(this._data);
+		var dataKeys = Object.keys(this._data);
 
 		var enumerable = this.constructor.enumerable;
 		if (enumerable) {

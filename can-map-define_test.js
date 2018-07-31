@@ -1649,6 +1649,13 @@ QUnit.test("can.getOwnEnumerableKeys works without define (#81)", function() {
 	deepEqual( canReflect.getOwnEnumerableKeys(vm), [ "foo", "abc" ], "with empty define, with late prop");
 });
 
+QUnit.test("can.getOwnEnumerableKeys works with null", function() {
+	var VM = CanMap.extend({});
+
+	var vm = new VM({ foo: null });
+	deepEqual( canReflect.getOwnEnumerableKeys(vm), [ "foo" ], "getOwnEnumerableKeys works with null");
+});
+
 require("can-reflect-tests/observables/map-like/type/type")("CanMap / can-map-define", function(){
 	return CanMap.extend({});
 });
