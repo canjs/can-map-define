@@ -1628,3 +1628,23 @@ QUnit.test("can.getOwnEnumerableKeys", function() {
 	deepEqual( canReflect.getOwnEnumerableKeys(vm), [ "enumerableProp", "enumByDefault", "parentEnum", "parentEnumByDefault", "lateProp" ], "vm.getOwnEnumerableKeys() with late prop");
 
 });
+
+QUnit.test("can.getOwnEnumerableKeys works without define (#81)", function() {
+	var VM = CanMap.extend({});
+
+	var vm = new VM({ foo: "bar" });
+	deepEqual( canReflect.getOwnEnumerableKeys(vm), [ "foo" ], "without define");
+
+	vm.attr("abc", "xyz");
+	deepEqual( canReflect.getOwnEnumerableKeys(vm), [ "foo", "abc" ], "without define, with late prop");
+
+	VM = CanMap.extend({
+		define: {}
+	});
+
+	vm = new VM({ foo: "bar" });
+	deepEqual( canReflect.getOwnEnumerableKeys(vm), [ "foo" ], "with empty define");
+
+	vm.attr("abc", "xyz");
+	deepEqual( canReflect.getOwnEnumerableKeys(vm), [ "foo", "abc" ], "with empty define, with late prop");
+});

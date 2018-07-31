@@ -396,6 +396,7 @@ canReflect.assignSymbols(proto, {
 		var propExists = key in this;
 		return defined || dataExists || propExists;
 	},
+
 	"can.getOwnEnumerableKeys": function() {
 		if (!this.__inSetup) {
 			ObservationRecorder.add(this, '__keys');
@@ -409,7 +410,7 @@ canReflect.assignSymbols(proto, {
 			newKey = dataKeys[i];
 			// add keys that are in _data, but are not in `define`
 			// keys in `define` are in `definedKeys` based on their `serialize` prop
-			if (definedKeys.indexOf(newKey) < 0 && this.define && !this.define[newKey]) {
+			if (definedKeys.indexOf(newKey) < 0 && (!this.define || !this.define[newKey])) {
 				definedKeys.push(dataKeys[i]);
 			}
 		}
