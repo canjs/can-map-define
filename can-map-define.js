@@ -13,11 +13,39 @@ require('can-list');
 
 var define = {}; // jshint ignore:line
 
+var hasDefaultForSerialize = function(defaultDefinition) {
+	return (
+		typeof defaultDefinition === "object" &&
+		"serialize" in defaultDefinition
+	);
+};
+
+var getDefaultForSerialize = function(defaultDefinition) {
+	var shouldSerialize = true;
+
+	if (hasDefaultForSerialize(defaultDefinition)) {
+		shouldSerialize = !!defaultDefinition.serialize;
+	}
+
+	return shouldSerialize;
+};
+
 var keysForDefinition = function(definitions) {
 	var keys = [];
-	for(var prop in definitions) {
+	var defaultDefinition = definitions && definitions["*"];
+	for (var prop in definitions) {
 		var definition = definitions[prop];
-		if(typeof definition !== "object" || ("serialize" in definition ? !!definition.serialize : !definition.get)) {
+		var shouldSerialize = getDefaultForSerialize(defaultDefinition);
+		// allow property definitions to override default behavior
+		if (typeof definition === "object" && "serialize" in definition) {
+			shouldSerialize = !!definition.serialize;
+		} else if (
+			typeof definition === "object" &&
+			!hasDefaultForSerialize(defaultDefinition)
+		) {
+			shouldSerialize = !definition.get;
+		}
+		if (shouldSerialize) {
 			keys.push(prop);
 		}
 	}
@@ -404,13 +432,14 @@ canReflect.assignSymbols(proto, {
 
 		var definedKeys = keysForDefinition(this.define);
 		var dataKeys = Object.keys(this._data);
+		var shouldSerialize = getDefaultForSerialize(this.define && this.define["*"]);
 
 		var enumerable = this.constructor.enumerable;
-		if (enumerable) {
-			dataKeys = dataKeys.filter(function(key) {
-				return enumerable[key] !== false;
-			});
-		}
+		dataKeys = dataKeys.filter(function(key) {
+			return enumerable ?
+				shouldSerialize && enumerable[key] !== false :
+				shouldSerialize;
+		});
 
 		var i, newKey;
 		for(i=0; i<dataKeys.length; i++) {
