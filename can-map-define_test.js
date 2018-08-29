@@ -1659,3 +1659,130 @@ QUnit.test("can.getOwnEnumerableKeys works with null", function() {
 require("can-reflect-tests/observables/map-like/type/type")("CanMap / can-map-define", function(){
 	return CanMap.extend({});
 });
+
+QUnit.test("can.getOwnEnumerableKeys with default behavior", function(assert) {
+	var VM = CanMap.extend({
+		define: {
+			"*": {
+				serialize: false
+			},
+			notEnumerable: {
+				value: "no"
+			},
+			enumerableProp: {
+				serialize: true,
+				value: "yes"
+			},
+			notEnumerable2: {
+				serialize: false,
+				value: "maybe"
+			},
+			enumGetter: {
+				get: function() {
+					return "got";
+				}
+			}
+		}
+	});
+
+	var vm = new VM();
+
+	assert.deepEqual(
+		canReflect.getOwnEnumerableKeys(vm), 
+		["enumerableProp"],
+		"vm.getOwnEnumerableKeys()"
+	);
+});
+
+QUnit.test("can.getOwnEnumerableKeys with default behavior and late set properties", function(assert) {
+	var VM = CanMap.extend({
+		define: {
+			"*": {
+				serialize: false
+			},
+			notEnumerable: {
+				value: "no"
+			},
+			enumerableProp: {
+				serialize: true,
+				value: "yes"
+			}
+		}
+	});
+
+	var vm = new VM();
+
+	assert.deepEqual(
+		canReflect.getOwnEnumerableKeys(vm),
+		["enumerableProp"],
+		"getOwnEnumerableKeys() should return explicitly serializable properties"
+	);
+
+	vm.attr("lateProperty", true);
+	assert.deepEqual(
+		canReflect.getOwnEnumerableKeys(vm),
+		["enumerableProp"],
+		"late set properties should inherit default behavior"
+	);
+});
+
+QUnit.test("can.getOwnEnumerableKeys with default behavior, nested maps and late set props", function(assert) {
+	var ParentMap = CanMap.extend({
+		define: {
+			parentNoEnum: {
+				serialize: false,
+				value: "parent_no"
+			},
+			parentEnum: {
+				serialize: true,
+				value: "parent_yes"
+			},
+			parentEnumByDefault: {
+				value: "maybe"
+			},
+			parentEnumGetter: {
+				get: function() {
+					return "parent_get";
+				}
+			}
+		}
+	});
+
+	var VM = ParentMap.extend({
+		define: {
+			"*": {
+				serialize: false,
+			},
+			notEnumerable: {
+				serialize: false,
+				value: "no"
+			},
+			enumerableProp: {
+				serialize: true,
+				value: "yes"
+			},
+			alsoNotEnumerable: {
+				value: "maybe"
+			},
+			enumGetter: {
+				get: function() {
+					return "got";
+				}
+			}
+		}
+	});
+
+	var vm = new VM();
+	assert.deepEqual(
+		canReflect.getOwnEnumerableKeys(vm),
+		["enumerableProp", "parentEnum"],
+		"vm.getOwnEnumerableKeys()"
+	);
+
+	vm.attr("lateProperty", true);
+	assert.deepEqual(
+		canReflect.getOwnEnumerableKeys(vm),
+		["enumerableProp", "parentEnum"],
+		"late added properties should inherit default behavior"
+	);
+});
