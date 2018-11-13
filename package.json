@@ -43,7 +43,7 @@
     "can-map": "^4.0.1",
     "can-observation-recorder": "^1.2.0",
     "can-queues": "^1.0.1",
-    "can-reflect": "^1.15.2"
+    "can-reflect": "^1.17.7"
   },
   "devDependencies": {
     "bit-docs": "0.0.7",
