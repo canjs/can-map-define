@@ -1688,7 +1688,7 @@ QUnit.test("can.getOwnEnumerableKeys with default behavior", function(assert) {
 	var vm = new VM();
 
 	assert.deepEqual(
-		canReflect.getOwnEnumerableKeys(vm), 
+		canReflect.getOwnEnumerableKeys(vm),
 		["enumerableProp"],
 		"vm.getOwnEnumerableKeys()"
 	);
@@ -1785,4 +1785,36 @@ QUnit.test("can.getOwnEnumerableKeys with default behavior, nested maps and late
 		["enumerableProp", "parentEnum"],
 		"late added properties should inherit default behavior"
 	);
+});
+
+QUnit.test("resolver behavior: with counter", function(){
+	var Person = CanMap.extend('Person', {
+		define: {
+			name: {
+				type: "string"
+			},
+			nameChangedCount: {
+				resolver({ listenTo, resolve }) {
+					var count = resolve(0);
+					listenTo("name", ()=>{  resolve(++count) })
+				}
+			}
+		}
+	});
+
+	var me = new Person();
+	QUnit.equal(me.attr("nameChangedCount"), 0, "unbound value");
+
+	me.attr("name", "first");
+
+	QUnit.equal(me.attr("nameChangedCount"), 0, "unbound value");
+
+	me.on("nameChangedCount", function(ev, newVal, oldVal){
+			QUnit.equal(newVal, 1, "updated count");
+			QUnit.equal(oldVal, 0, "updated count from old value");
+	});
+
+	me.attr("name", "second");
+
+	QUnit.equal(me.attr("nameChangedCount"), 1, "bound value");
 });
