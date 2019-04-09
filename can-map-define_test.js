@@ -1,4 +1,5 @@
 /* jshint asi: false */
+/*jshint esversion: 6 */
 var QUnit = require('steal-qunit');
 var sub = require('can-key/sub/sub');
 var CanMap = require('can-map');
@@ -1800,9 +1801,9 @@ QUnit.test("resolver behavior: with counter", function(){
 				type: "string"
 			},
 			nameChangedCount: {
-				resolver({ listenTo, resolve }) {
+				resolver: function ({ listenTo, resolve }) {
 					var count = resolve(0);
-					listenTo("name", ()=>{  resolve(++count) })
+					listenTo("name", function() {  resolve(++count); });
 				}
 			}
 		}
