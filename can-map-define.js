@@ -10,6 +10,8 @@ var compute = require('can-compute');
 var canReflect = require('can-reflect');
 var ObservationRecorder = require('can-observation-recorder');
 var canSymbol = require('can-symbol');
+var Resolver = require("can-simple-observable/resolver/resolver");
+
 require('can-list');
 
 var define = {}; // jshint ignore:line
@@ -371,6 +373,9 @@ proto._setupComputedProperties = function() {
 			get = def.get;
 		if (get) {
 			mapHelpers.addComputedAttr(this, attr, compute.async(undefined, get, this));
+		}
+		if (def.resolver) {
+			mapHelpers.addComputedAttr(this, attr, new Resolver(def.resolver, this, def.value ) );
 		}
 	}
 };
