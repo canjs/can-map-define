@@ -1,5 +1,4 @@
 /* jshint asi: false */
-/*jshint esversion: 6 */
 var QUnit = require('steal-qunit');
 var sub = require('can-key/sub/sub');
 var CanMap = require('can-map');
@@ -1794,16 +1793,16 @@ QUnit.test("can.getOwnEnumerableKeys with default behavior, nested maps and late
 	);
 });
 
-QUnit.test("resolver behavior: with counter", function(){
+QUnit.test("resolver behavior: with counter (#96)", function(){
 	var Person = CanMap.extend('Person', {
 		define: {
 			name: {
 				type: "string"
 			},
 			nameChangedCount: {
-				resolver: function ({ listenTo, resolve }) {
-					var count = resolve(0);
-					listenTo("name", function() {  resolve(++count); });
+				resolver: function (prop) {
+					var count = prop.resolve(0);
+					prop.listenTo("name", function() {  prop.resolve(++count); });
 				}
 			}
 		}
