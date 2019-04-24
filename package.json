@@ -46,7 +46,7 @@
     "can-reflect": "^1.15.2"
   },
   "devDependencies": {
-    "bit-docs": "0.0.7",
+    "bit-docs": "0.2.0",
     "can-component": "^4.0.4",
     "can-key": "<2.0.0",
     "can-reflect-tests": "^0.2.1",
