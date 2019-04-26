@@ -9,9 +9,11 @@ var CanMap = require('can-map');
 var compute = require('can-compute');
 var canReflect = require('can-reflect');
 var ObservationRecorder = require('can-observation-recorder');
+var canSymbol = require('can-symbol');
 require('can-list');
 
 var define = {}; // jshint ignore:line
+var inSetupSymbol = canSymbol.for("can.initializing");
 
 var hasDefaultForSerialize = function(defaultDefinition) {
 	return (
@@ -426,7 +428,7 @@ canReflect.assignSymbols(proto, {
 	},
 
 	"can.getOwnEnumerableKeys": function() {
-		if (!this.__inSetup) {
+		if (!this[inSetupSymbol]) {
 			ObservationRecorder.add(this, '__keys');
 		}
 
