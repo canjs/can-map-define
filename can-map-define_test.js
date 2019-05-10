@@ -11,7 +11,7 @@ require('./can-map-define');
 QUnit.module('can-map-define');
 
 // remove, type, default
-QUnit.test('basics set', function() {
+QUnit.test('basics set', function(assert) {
 	var Defined = CanMap.extend({
 		define: {
 			prop: {
@@ -25,7 +25,7 @@ QUnit.test('basics set', function() {
 	var def = new Defined();
 	def.attr("prop", "bar");
 
-	equal(def.attr("prop"), "foobar", "setter works");
+	assert.equal(def.attr("prop"), "foobar", "setter works");
 
 	Defined = CanMap.extend({
 		define: {
@@ -40,11 +40,11 @@ QUnit.test('basics set', function() {
 	def = new Defined();
 	def.attr("prop", "bar");
 
-	equal(def.attr("prop"), "foobar", "setter callback works");
+	assert.equal(def.attr("prop"), "foobar", "setter callback works");
 
 });
 
-QUnit.test("basics remove", function() {
+QUnit.test("basics remove", function(assert) {
 	var ViewModel = CanMap.extend({
 		define: {
 			makeId: {
@@ -95,8 +95,8 @@ QUnit.test("basics remove", function() {
 		if (batchNum === undefined) {
 			batchNum = ev.batchNum;
 		}
-		equal(attr, events[eventCount++], "got correct attribute");
-		ok(ev.batchNum && ev.batchNum === batchNum, "batched");
+		assert.equal(attr, events[eventCount++], "got correct attribute");
+		assert.ok(ev.batchNum && ev.batchNum === batchNum, "batched");
 	});
 
 	mmy.removeAttr("makeId");
@@ -159,9 +159,9 @@ QUnit.test("basics get", function(assert) {
 	});
 });
 
-QUnit.test("basic type", function() {
+QUnit.test("basic type", function(assert) {
 
-	expect(6);
+	assert.expect(6);
 
 	var Typer = CanMap.extend({
 		define: {
@@ -187,28 +187,28 @@ QUnit.test("basic type", function() {
 
 
 	var t = new Typer();
-	deepEqual(CanMap.keys(t), ["arrayWithAddedItem", "listWithAddedItem"], "defined keys");
+	assert.deepEqual(CanMap.keys(t), ["arrayWithAddedItem", "listWithAddedItem"], "defined keys");
 
 	var array = [];
 	t.attr("arrayWithAddedItem", array);
 
-	deepEqual(array, ["item"], "updated array");
-	equal(t.attr("arrayWithAddedItem"), array, "leave value as array");
+	assert.deepEqual(array, ["item"], "updated array");
+	assert.equal(t.attr("arrayWithAddedItem"), array, "leave value as array");
 
 	t.attr("listWithAddedItem", []);
 
-	ok(t.attr("listWithAddedItem") instanceof List, "convert to List");
-	equal(t.attr("listWithAddedItem").attr(0), "item", "has item in it");
+	assert.ok(t.attr("listWithAddedItem") instanceof List, "convert to List");
+	assert.equal(t.attr("listWithAddedItem").attr(0), "item", "has item in it");
 
 	t.bind("change", function(ev, attr) {
-		equal(attr, "listWithAddedItem.1", "got a bubbling event");
+		assert.equal(attr, "listWithAddedItem.1", "got a bubbling event");
 	});
 
 	t.attr("listWithAddedItem").push("another item");
 
 });
 
-QUnit.test("basic Type", function() {
+QUnit.test("basic Type", function(assert) {
 	var Foo = function(name) {
 		this.name = name;
 	};
@@ -227,17 +227,17 @@ QUnit.test("basic Type", function() {
 	var t = new Typer({
 		foo: "Justin"
 	});
-	equal(t.attr("foo").getName(), "Justin", "correctly created an instance");
+	assert.equal(t.attr("foo").getName(), "Justin", "correctly created an instance");
 
 	var brian = new Foo("brian");
 
 	t.attr("foo", brian);
 
-	equal(t.attr("foo"), brian, "same instances");
+	assert.equal(t.attr("foo"), brian, "same instances");
 
 });
 
-QUnit.test("type converters", function() {
+QUnit.test("type converters", function(assert) {
 
 	var Typer = CanMap.extend({
 		define: {
@@ -272,26 +272,26 @@ QUnit.test("type converters", function() {
 		leaveAlone: obj
 	});
 
-	ok(t.attr("date") instanceof Date, "converted to date");
+	assert.ok(t.attr("date") instanceof Date, "converted to date");
 
-	equal(t.attr("string"), '5', "converted to string");
+	assert.equal(t.attr("string"), '5', "converted to string");
 
-	equal(t.attr("number"), 5, "converted to number");
+	assert.equal(t.attr("number"), 5, "converted to number");
 
-	equal(t.attr("boolean"), false, "converted to boolean");
+	assert.equal(t.attr("boolean"), false, "converted to boolean");
 
-	equal(t.attr("htmlbool"), true, "converted to htmlbool");
+	assert.equal(t.attr("htmlbool"), true, "converted to htmlbool");
 
-	equal(t.attr("leaveAlone"), obj, "left as object");
+	assert.equal(t.attr("leaveAlone"), obj, "left as object");
 	t.attr({
 		'number': '15'
 	});
-	ok(t.attr("number") === 15, "converted to number");
+	assert.ok(t.attr("number") === 15, "converted to number");
 
 });
 
 
-QUnit.test("basics value", function() {
+QUnit.test("basics value", function(assert) {
 	var Typer = CanMap.extend({
 		define: {
 			prop: {
@@ -300,7 +300,7 @@ QUnit.test("basics value", function() {
 		}
 	});
 
-	equal(new Typer().attr('prop'), "foo", "value is used as default value");
+	assert.equal(new Typer().attr('prop'), "foo", "value is used as default value");
 
 
 	var Typer2 = CanMap.extend({
@@ -316,13 +316,13 @@ QUnit.test("basics value", function() {
 
 	var t1 = new Typer2(),
 		t2 = new Typer2();
-	ok(t1.attr("prop") !== t2.attr("prop"), "different array instances");
-	ok(Array.isArray(t1.attr("prop")), "its an array");
+	assert.ok(t1.attr("prop") !== t2.attr("prop"), "different array instances");
+	assert.ok(Array.isArray(t1.attr("prop")), "its an array");
 
 
 });
 
-QUnit.test("basics Value", function() {
+QUnit.test("basics Value", function(assert) {
 
 	var Typer = CanMap.extend({
 		define: {
@@ -335,14 +335,14 @@ QUnit.test("basics Value", function() {
 
 	var t1 = new Typer(),
 		t2 = new Typer();
-	ok(t1.attr("prop") !== t2.attr("prop"), "different array instances");
-	ok(Array.isArray(t1.attr("prop")), "its an array");
+	assert.ok(t1.attr("prop") !== t2.attr("prop"), "different array instances");
+	assert.ok(Array.isArray(t1.attr("prop")), "its an array");
 
 
 });
 
 
-QUnit.test("setter with no arguments and returns undefined does the default behavior, the setter is for side effects only", function() {
+QUnit.test("setter with no arguments and returns undefined does the default behavior, the setter is for side effects only", function(assert) {
 
 	var Typer = CanMap.extend({
 		define: {
@@ -358,7 +358,7 @@ QUnit.test("setter with no arguments and returns undefined does the default beha
 
 	t.attr("prop", false);
 
-	deepEqual(t.attr(), {
+	assert.deepEqual(t.attr(), {
 		foo: "bar",
 		prop: false
 	});
@@ -366,13 +366,13 @@ QUnit.test("setter with no arguments and returns undefined does the default beha
 
 });
 
-QUnit.test("type happens before the set", function() {
+QUnit.test("type happens before the set", function(assert) {
 	var MyMap = CanMap.extend({
 		define: {
 			prop: {
 				type: "number",
 				set: function(newValue) {
-					equal(typeof newValue, "number", "got a number");
+					assert.equal(typeof newValue, "number", "got a number");
 					return newValue + 1;
 				}
 			}
@@ -382,11 +382,11 @@ QUnit.test("type happens before the set", function() {
 	var map = new MyMap();
 	map.attr("prop", "5");
 
-	equal(map.attr("prop"), 6, "number");
+	assert.equal(map.attr("prop"), 6, "number");
 });
 
-QUnit.test("getter and setter work", function() {
-	expect(5);
+QUnit.test("getter and setter work", function(assert) {
+	assert.expect(5);
 	var Paginate = CanMap.extend({
 		define: {
 			page: {
@@ -405,23 +405,23 @@ QUnit.test("getter and setter work", function() {
 		offset: 20
 	});
 
-	equal(p.attr("page"), 3, "page get right");
+	assert.equal(p.attr("page"), 3, "page get right");
 
 	p.bind("page", function(ev, newValue, oldValue) {
-		equal(newValue, 2, "got new value event");
-		equal(oldValue, 3, "got old value event");
+		assert.equal(newValue, 2, "got new value event");
+		assert.equal(oldValue, 3, "got old value event");
 	});
 
 	p.attr("page", 2);
 
-	equal(p.attr("page"), 2, "page set right");
+	assert.equal(p.attr("page"), 2, "page set right");
 
-	equal(p.attr("offset"), 10, "page offset set");
+	assert.equal(p.attr("offset"), 10, "page offset set");
 
 
 });
 
-QUnit.test("getter with initial value", function() {
+QUnit.test("getter with initial value", function(assert) {
 
 	var comp = compute(1);
 
@@ -444,12 +444,12 @@ QUnit.test("getter with initial value", function() {
 
 	// This assertion doesn't mean much.  It's mostly testing
 	// that there were no errors.
-	equal(g.attr("vals").length, 0, "zero items in array");
+	assert.equal(g.attr("vals").length, 0, "zero items in array");
 
 });
 
 
-QUnit.test("serialize basics", function() {
+QUnit.test("serialize basics", function(assert) {
 	var MyMap = CanMap.extend({
 		define: {
 			name: {
@@ -496,21 +496,21 @@ QUnit.test("serialize basics", function() {
 		id: 2,
 		name: "LA"
 	}]);
-	equal(map.attr("locationIds").length, 2, "get locationIds");
-	equal(map.attr("locationIds")[0], 1, "get locationIds index 0");
-	equal(map.attr("locations")[0].id, 1, "get locations index 0");
+	assert.equal(map.attr("locationIds").length, 2, "get locationIds");
+	assert.equal(map.attr("locationIds")[0], 1, "get locationIds index 0");
+	assert.equal(map.attr("locations")[0].id, 1, "get locations index 0");
 
 	var serialized = map.serialize();
-	equal(serialized.locations, undefined, "locations doesn't serialize");
-	equal(serialized.locationIds, "1,2", "locationIds serializes");
-	equal(serialized.name, undefined, "name doesn't serialize");
+	assert.equal(serialized.locations, undefined, "locations doesn't serialize");
+	assert.equal(serialized.locationIds, "1,2", "locationIds serializes");
+	assert.equal(serialized.name, undefined, "name doesn't serialize");
 
-	equal(serialized.bared, "foo+bar", "true adds computed props");
-	equal(serialized.ignored, undefined, "computed props are not serialized by default");
+	assert.equal(serialized.bared, "foo+bar", "true adds computed props");
+	assert.equal(serialized.ignored, undefined, "computed props are not serialized by default");
 
 });
 
-QUnit.test("serialize context", function() {
+QUnit.test("serialize context", function(assert) {
 	var context, serializeContext;
 	var MyMap = CanMap.extend({
 		define: {
@@ -530,11 +530,11 @@ QUnit.test("serialize context", function() {
 
 	var map = new MyMap();
 	map.serialize();
-	equal(context, map);
-	equal(serializeContext, map);
+	assert.equal(context, map);
+	assert.equal(serializeContext, map);
 });
 
-QUnit.test("methods contexts", function() {
+QUnit.test("methods contexts", function(assert) {
 	var contexts = {};
 	var MyMap = CanMap.extend({
 		define: {
@@ -574,14 +574,14 @@ QUnit.test("methods contexts", function() {
 	map.serialize();
 	map.removeAttr('name');
 
-	equal(contexts.get, map);
-	equal(contexts.remove, map);
-	equal(contexts.set, map);
-	equal(contexts.serialize, map);
-	equal(contexts.type, map);
+	assert.equal(contexts.get, map);
+	assert.equal(contexts.remove, map);
+	assert.equal(contexts.set, map);
+	assert.equal(contexts.serialize, map);
+	assert.equal(contexts.type, map);
 });
 
-QUnit.test("value generator is not called if default passed", function() {
+QUnit.test("value generator is not called if default passed", function(assert) {
 	var TestMap = CanMap.extend({
 		define: {
 			foo: {
@@ -596,10 +596,10 @@ QUnit.test("value generator is not called if default passed", function() {
 		foo: 'baz'
 	});
 
-	equal(tm.attr('foo'), 'baz');
+	assert.equal(tm.attr('foo'), 'baz');
 });
 
-QUnit.test("Value generator can read other properties", function() {
+QUnit.test("Value generator can read other properties", function(assert) {
 	var Map = CanMap.extend({
 		letters: 'ABC',
 		numbers: [1, 2, 3],
@@ -662,24 +662,24 @@ QUnit.test("Value generator can read other properties", function() {
 	var map = new Map();
 	var prefix = 'Was able to read dependent value from ';
 
-	equal(map.attr('firstLetter'), 'A',
+	assert.equal(map.attr('firstLetter'), 'A',
 		prefix + 'traditional CanMap style property definition');
-	equal(map.attr('firstNumber'), 1,
+	assert.equal(map.attr('firstNumber'), 1,
 		prefix + 'traditional CanMap style property definition');
 
-	equal(map.attr('middleLetter'), 'E',
+	assert.equal(map.attr('middleLetter'), 'E',
 		prefix + 'define plugin style default property definition');
-	equal(map.attr('middleNumber'), 5,
+	assert.equal(map.attr('middleNumber'), 5,
 		prefix + 'define plugin style default property definition');
 
-	equal(map.attr('lastLetter'), 'I',
+	assert.equal(map.attr('lastLetter'), 'I',
 		prefix + 'define plugin style generated default property definition');
-	equal(map.attr('lastNumber'), 9,
+	assert.equal(map.attr('lastNumber'), 9,
 		prefix + 'define plugin style generated default property definition');
 });
 
-QUnit.test('default behaviors with "*" work for attributes', function() {
-	expect(9);
+QUnit.test('default behaviors with "*" work for attributes', function(assert) {
+	assert.expect(9);
 	var DefaultMap = CanMap.extend({
 		define: {
 			someNumber: {
@@ -691,11 +691,11 @@ QUnit.test('default behaviors with "*" work for attributes', function() {
 					return '' + value;
 				},
 				set: function(newVal) {
-					ok(true, 'set called');
+					assert.ok(true, 'set called');
 					return newVal;
 				},
 				remove: function(currentVal) {
-					ok(true, 'remove called');
+					assert.ok(true, 'remove called');
 					return false;
 				}
 			}
@@ -705,20 +705,20 @@ QUnit.test('default behaviors with "*" work for attributes', function() {
 	var map = new DefaultMap(),
 		serializedMap;
 
-	equal(map.attr('someNumber'), 5, 'value of someNumber should be converted to a number');
+	assert.equal(map.attr('someNumber'), 5, 'value of someNumber should be converted to a number');
 	map.attr('number', '10'); // Custom set should be called
-	equal(map.attr('number'), 10, 'value of number should be converted to a number');
+	assert.equal(map.attr('number'), 10, 'value of number should be converted to a number');
 	map.removeAttr('number'); // Custom removed should be called
-	equal(map.attr('number'), 10, 'number should not be removed');
+	assert.equal(map.attr('number'), 10, 'number should not be removed');
 
 	serializedMap = map.serialize();
 
-	equal(serializedMap.number, '10', 'number serialized as string');
-	equal(serializedMap.someNumber, '5', 'someNumber serialized as string');
-	equal(serializedMap['*'], undefined, '"*" is not a value in serialized object');
+	assert.equal(serializedMap.number, '10', 'number serialized as string');
+	assert.equal(serializedMap.someNumber, '5', 'someNumber serialized as string');
+	assert.equal(serializedMap['*'], undefined, '"*" is not a value in serialized object');
 });
 
-QUnit.test('models properly serialize with default behaviors', function() {
+QUnit.test('models properly serialize with default behaviors', function(assert) {
 	var DefaultMap = CanMap.extend({
 		define: {
 			name: {
@@ -739,12 +739,12 @@ QUnit.test('models properly serialize with default behaviors', function() {
 		}),
 		serializedMap = map.serialize();
 
-	equal(serializedMap.age, undefined, 'age doesn\'t exist');
-	equal(serializedMap.name, undefined, 'name doesn\'t exist');
-	equal(serializedMap.shirt, 'blue', 'shirt exists');
+	assert.equal(serializedMap.age, undefined, 'age doesn\'t exist');
+	assert.equal(serializedMap.name, undefined, 'name doesn\'t exist');
+	assert.equal(serializedMap.shirt, 'blue', 'shirt exists');
 });
 
-QUnit.test("nested define", function() {
+QUnit.test("nested define", function(assert) {
 	var nailedIt = 'Nailed it';
 	var Example = CanMap.extend({}, {
 		define: {
@@ -786,17 +786,17 @@ QUnit.test("nested define", function() {
 	var nested = new NestedMap();
 
 	// values are correct
-	equal(nested.attr('test.name'), nailedIt);
-	equal(nested.attr('examples.one.name'), nailedIt);
-	equal(nested.attr('examples.two.deep.name'), nailedIt);
+	assert.equal(nested.attr('test.name'), nailedIt);
+	assert.equal(nested.attr('examples.one.name'), nailedIt);
+	assert.equal(nested.attr('examples.two.deep.name'), nailedIt);
 
 	// objects are correctly instanced
-	ok(nested.attr('test') instanceof Example);
-	ok(nested.attr('examples.one') instanceof Example);
-	ok(nested.attr('examples.two.deep') instanceof Example);
+	assert.ok(nested.attr('test') instanceof Example);
+	assert.ok(nested.attr('examples.one') instanceof Example);
+	assert.ok(nested.attr('examples.two.deep') instanceof Example);
 });
 
-QUnit.test('Can make an attr alias a compute (#1470)', 9, function() {
+QUnit.test('Can make an attr alias a compute (#1470)', 9, function(assert) {
 	var computeValue = compute(1);
 	var GetMap = CanMap.extend({
 		define: {
@@ -822,7 +822,7 @@ QUnit.test('Can make an attr alias a compute (#1470)', 9, function() {
 
 	getMap.attr("value", computeValue);
 
-	equal(getMap.attr("value"), 1);
+	assert.equal(getMap.attr("value"), 1);
 
 	var bindCallbacks = 0;
 
@@ -830,16 +830,16 @@ QUnit.test('Can make an attr alias a compute (#1470)', 9, function() {
 
 		switch (bindCallbacks) {
 			case 0:
-				equal(newVal, 2, "0 - bind called with new val");
-				equal(oldVal, 1, "0 - bind called with old val");
+				assert.equal(newVal, 2, "0 - bind called with new val");
+				assert.equal(oldVal, 1, "0 - bind called with old val");
 				break;
 			case 1:
-				equal(newVal, 3, "1 - bind called with new val");
-				equal(oldVal, 2, "1 - bind called with old val");
+				assert.equal(newVal, 3, "1 - bind called with new val");
+				assert.equal(oldVal, 2, "1 - bind called with old val");
 				break;
 			case 2:
-				equal(newVal, 4, "2 - bind called with new val");
-				equal(oldVal, 3, "2 - bind called with old val");
+				assert.equal(newVal, 4, "2 - bind called with new val");
+				assert.equal(oldVal, 3, "2 - bind called with old val");
 				break;
 		}
 
@@ -853,8 +853,8 @@ QUnit.test('Can make an attr alias a compute (#1470)', 9, function() {
 	// Try setting the value of the property
 	getMap.attr("value", 3);
 
-	equal(getMap.attr("value"), 3, "read value is 3");
-	equal(computeValue(), 3, "the compute value is 3");
+	assert.equal(getMap.attr("value"), 3, "read value is 3");
+	assert.equal(computeValue(), 3, "the compute value is 3");
 
 	// Try setting to a new comptue
 	var newComputeValue = compute(4);
@@ -863,7 +863,7 @@ QUnit.test('Can make an attr alias a compute (#1470)', 9, function() {
 
 });
 
-QUnit.test('setting a value of a property with type "compute" triggers change events', function() {
+QUnit.test('setting a value of a property with type "compute" triggers change events', function(assert) {
 
 	var handler;
 	var message = 'The change event passed the correct {prop} when set with {method}';
@@ -874,9 +874,9 @@ QUnit.test('setting a value of a property with type "compute" triggers change ev
 				prop: 'newVal',
 				method: method
 			};
-			equal(newVal, expectedNewVal, sub(message, subs));
+			assert.equal(newVal, expectedNewVal, sub(message, subs));
 			subs.prop = 'oldVal';
-			equal(oldVal, expectedOldVal, sub(message, subs));
+			assert.equal(oldVal, expectedOldVal, sub(message, subs));
 		};
 	};
 
@@ -894,7 +894,7 @@ QUnit.test('setting a value of a property with type "compute" triggers change ev
 		computed: computed
 	});
 
-	equal(m1.attr('computed'), 0, 'm1 is 1');
+	assert.equal(m1.attr('computed'), 0, 'm1 is 1');
 
 	handler = createChangeHandler(0, 1, ".attr('computed', newVal)");
 	m1.bind('computed', handler);
@@ -907,7 +907,7 @@ QUnit.test('setting a value of a property with type "compute" triggers change ev
 	m1.unbind('computed', handler);
 });
 
-QUnit.test('replacing the compute on a property with type "compute"', function() {
+QUnit.test('replacing the compute on a property with type "compute"', function(assert) {
 	var compute1 = compute(0);
 	var compute2 = compute(1);
 
@@ -924,17 +924,17 @@ QUnit.test('replacing the compute on a property with type "compute"', function()
 	m.attr('computable', compute1);
 
 
-	equal(m.attr('computable'), 0, 'compute1 readable via .attr()');
+	assert.equal(m.attr('computable'), 0, 'compute1 readable via .attr()');
 
 	m.attr('computable', compute2);
 
 
-	equal(m.attr('computable'), 1, 'compute2 readable via .attr()');
+	assert.equal(m.attr('computable'), 1, 'compute2 readable via .attr()');
 });
 
 // The old attributes plugin interferes severly with this test.
 // TODO remove this condition when taking the plugins out of the main repository
-QUnit.test('value and get (#1521)', function() {
+QUnit.test('value and get (#1521)', function(assert) {
 	var MyMap = CanMap.extend({
 		define: {
 			data: {
@@ -954,11 +954,11 @@ QUnit.test('value and get (#1521)', function() {
 	});
 
 	var map = new MyMap({});
-	equal(map.attr('size'), 2);
+	assert.equal(map.attr('size'), 2);
 });
 
 
-QUnit.test("One event on getters (#1585)", function() {
+QUnit.test("One event on getters (#1585)", function(assert) {
 
 	var AppState = CanMap.extend({
 		define: {
@@ -993,10 +993,10 @@ QUnit.test("One event on getters (#1585)", function() {
 	}));
 
 
-	equal(personEvents, 2);
+	assert.equal(personEvents, 2);
 });
 
-QUnit.test('Can read a defined property with a set/get method (#1648)', function() {
+QUnit.test('Can read a defined property with a set/get method (#1648)', function(assert) {
 	// Problem: "get" is not passed the correct "lastSetVal"
 	// Problem: Cannot read the value of "foo"
 
@@ -1016,14 +1016,14 @@ QUnit.test('Can read a defined property with a set/get method (#1648)', function
 
 	var map = new Map();
 
-	equal(map.attr('foo'), '', 'Calling .attr(\'foo\') returned the correct value');
+	assert.equal(map.attr('foo'), '', 'Calling .attr(\'foo\') returned the correct value');
 
 	map.attr('foo', 'baz');
 
-	equal(map.attr('foo'), 'baz', 'Calling .attr(\'foo\') returned the correct value');
+	assert.equal(map.attr('foo'), 'baz', 'Calling .attr(\'foo\') returned the correct value');
 });
 
-QUnit.test('Can bind to a defined property with a set/get method (#1648)', 3, function() {
+QUnit.test('Can bind to a defined property with a set/get method (#1648)', 3, function(assert) {
 	// Problem: "get" is not called before and after the "set"
 	// Problem: Function bound to "foo" is not called
 	// Problem: Cannot read the value of "foo"
@@ -1045,18 +1045,18 @@ QUnit.test('Can bind to a defined property with a set/get method (#1648)', 3, fu
 	var map = new Map();
 
 	map.bind('foo', function() {
-		ok(true, 'Bound function is called');
+		assert.ok(true, 'Bound function is called');
 	});
 
-	equal(map.attr('foo'), '', 'Calling .attr(\'foo\') returned the correct value');
+	assert.equal(map.attr('foo'), '', 'Calling .attr(\'foo\') returned the correct value');
 
 	map.attr('foo', 'baz');
 
-	equal(map.attr('foo'), 'baz', 'Calling .attr(\'foo\') returned the correct value');
+	assert.equal(map.attr('foo'), 'baz', 'Calling .attr(\'foo\') returned the correct value');
 });
 
 
-QUnit.test("type converters handle null and undefined in expected ways (1693)", function() {
+QUnit.test("type converters handle null and undefined in expected ways (1693)", function(assert) {
 
 	var Typer = CanMap.extend({
 		define: {
@@ -1095,17 +1095,17 @@ QUnit.test("type converters handle null and undefined in expected ways (1693)", 
 		leaveAlone: undefined
 	});
 
-	equal(t.attr("date"), undefined, "converted to date");
+	assert.equal(t.attr("date"), undefined, "converted to date");
 
-	equal(t.attr("string"), undefined, "converted to string");
+	assert.equal(t.attr("string"), undefined, "converted to string");
 
-	equal(t.attr("number"), undefined, "converted to number");
+	assert.equal(t.attr("number"), undefined, "converted to number");
 
-	equal(t.attr("boolean"), undefined, "converted to boolean");
+	assert.equal(t.attr("boolean"), undefined, "converted to boolean");
 
-	equal(t.attr("htmlbool"), false, "converted to htmlbool");
+	assert.equal(t.attr("htmlbool"), false, "converted to htmlbool");
 
-	equal(t.attr("leaveAlone"), undefined, "left as object");
+	assert.equal(t.attr("leaveAlone"), undefined, "left as object");
 
 	t = new Typer().attr({
 		date: null,
@@ -1116,28 +1116,28 @@ QUnit.test("type converters handle null and undefined in expected ways (1693)", 
 		leaveAlone: null
 	});
 
-	equal(t.attr("date"), null, "converted to date");
+	assert.equal(t.attr("date"), null, "converted to date");
 
-	equal(t.attr("string"), null, "converted to string");
+	assert.equal(t.attr("string"), null, "converted to string");
 
-	equal(t.attr("number"), null, "converted to number");
+	assert.equal(t.attr("number"), null, "converted to number");
 
-	equal(t.attr("boolean"), null, "converted to boolean");
+	assert.equal(t.attr("boolean"), null, "converted to boolean");
 
-	equal(t.attr("htmlbool"), false, "converted to htmlbool");
+	assert.equal(t.attr("htmlbool"), false, "converted to htmlbool");
 
-	equal(t.attr("leaveAlone"), null, "left as object");
+	assert.equal(t.attr("leaveAlone"), null, "left as object");
 
 });
 
-QUnit.test('Initial value does not call getter', function() {
-	expect(0);
+QUnit.test('Initial value does not call getter', function(assert) {
+	assert.expect(0);
 
 	var Map = CanMap.extend({
 		define: {
 			count: {
 				get: function(lastVal) {
-					ok(false, 'Should not be called');
+					assert.ok(false, 'Should not be called');
 					return lastVal;
 				}
 			}
@@ -1149,7 +1149,7 @@ QUnit.test('Initial value does not call getter', function() {
 	});
 });
 
-QUnit.test("getters produce change events", function() {
+QUnit.test("getters produce change events", function(assert) {
 	var Map = CanMap.extend({
 		define: {
 			count: {
@@ -1163,15 +1163,15 @@ QUnit.test("getters produce change events", function() {
 	var map = new Map();
 
 	map.bind("change", function() {
-		ok(true, "change called");
+		assert.ok(true, "change called");
 	});
 
 	map.attr("count", 22);
 });
 
-QUnit.test("Asynchronous virtual properties cause extra recomputes (#1915)", function() {
+QUnit.test("Asynchronous virtual properties cause extra recomputes (#1915)", function(assert) {
 
-	stop();
+	var done = assert.async();
 
 	var ran = false;
 	var VM = CanMap.extend({
@@ -1190,7 +1190,7 @@ QUnit.test("Asynchronous virtual properties cause extra recomputes (#1915)", fun
 					var foo = this.attr('foo');
 					if (foo) {
 						if (ran) {
-							ok(false, 'Getter ran twice');
+							assert.ok(false, 'Getter ran twice');
 						}
 						ran = true;
 						return foo * 2;
@@ -1204,19 +1204,19 @@ QUnit.test("Asynchronous virtual properties cause extra recomputes (#1915)", fun
 	vm.bind('bar', function() {});
 
 	setTimeout(function() {
-		equal(vm.attr('bar'), 10);
-		start();
+		assert.equal(vm.attr('bar'), 10);
+		done();
 	}, 200);
 
 });
 
 
-QUnit.test("double get in a compute (#2230)", function() {
+QUnit.test("double get in a compute (#2230)", function(assert) {
 	var VM = CanMap.extend({
 		define: {
 			names: {
 				get: function(val, setVal) {
-					ok(setVal, "setVal passed");
+					assert.ok(setVal, "setVal passed");
 					return 'Hi!';
 				}
 			}
@@ -1267,7 +1267,7 @@ QUnit.test("nullish values are not converted for Type", function(assert) {
 	assert.equal(vm.attr("map"), null, "notype is null");
 });
 
-QUnit.test("Wildcard serialize doesn't apply to getter properties (#4)", function() {
+QUnit.test("Wildcard serialize doesn't apply to getter properties (#4)", function(assert) {
 	var VM = CanMap.extend({
 		define: {
 			explicitlySerialized: {
@@ -1290,7 +1290,7 @@ QUnit.test("Wildcard serialize doesn't apply to getter properties (#4)", functio
 	var vm = new VM();
 	vm.bind('change', function() {});
 
-	deepEqual(vm.serialize(), {
+	assert.deepEqual(vm.serialize(), {
 		explicitlySerialized: true,
 		implicitlySerialized: true
 	});
@@ -1307,7 +1307,7 @@ QUnit.test("compute props can be set to null or undefined (#2372)", function(ass
 	assert.equal(vmUndef.foo, undefined, "foo is null, no error thrown");
 });
 
-QUnit.test("can inherit computes from another map (#2)", 4, function(){
+QUnit.test("can inherit computes from another map (#2)", 4, function(assert) {
 	var string1 = 'a string';
 	var string2 = 'another string';
 
@@ -1323,7 +1323,7 @@ QUnit.test("can inherit computes from another map (#2)", 4, function(){
 					return string1;
 				},
 				set: function(newVal) {
-					equal(newVal, string1, 'set was called');
+					assert.equal(newVal, string1, 'set was called');
 				}
 			}
 		}
@@ -1345,14 +1345,14 @@ QUnit.test("can inherit computes from another map (#2)", 4, function(){
 
 	var map = new MapB();
 
-	equal(map.attr('propC'), string2, 'props only in the child have the correct values');
-	equal(map.attr('propB'), string2, 'props in both have the child values');
-	equal(map.attr('propA'), string1, 'props only in the parent have the correct values');
+	assert.equal(map.attr('propC'), string2, 'props only in the child have the correct values');
+	assert.equal(map.attr('propB'), string2, 'props in both have the child values');
+	assert.equal(map.attr('propA'), string1, 'props only in the parent have the correct values');
 	map.attr('propB', string1);
 
 });
 
-QUnit.test("can inherit primitive values from another map (#2)", function(){
+QUnit.test("can inherit primitive values from another map (#2)", function(assert) {
 	var string1 = 'a';
 	var string2 = 'b';
 
@@ -1379,13 +1379,13 @@ QUnit.test("can inherit primitive values from another map (#2)", function(){
 
 	var map = new MapB();
 
-	equal(map.propC, string2, 'props only in the child have the correct values');
-	equal(map.propB, string2, 'props in both have the child values');
-	equal(map.propA, string1, 'props only in the parent have the correct values');
+	assert.equal(map.propC, string2, 'props only in the child have the correct values');
+	assert.equal(map.propB, string2, 'props in both have the child values');
+	assert.equal(map.propA, string1, 'props only in the parent have the correct values');
 
 });
 
-QUnit.test("can inherit object values from another map (#2)", function(){
+QUnit.test("can inherit object values from another map (#2)", function(assert) {
 	var object1 = {a: 'a'};
 	var object2 = {b: 'b'};
 
@@ -1420,13 +1420,13 @@ QUnit.test("can inherit object values from another map (#2)", function(){
 
 	var map = new MapB();
 
-	equal(map.attr('propC'), 	object2, 'props only in the child have the correct values');
-	equal(map.attr('propB'), 	object2, 'props in both have the child values');
-	equal(map.attr('propA'), 	object1, 'props only in the parent have the correct values');
+	assert.equal(map.attr('propC'), 	object2, 'props only in the child have the correct values');
+	assert.equal(map.attr('propB'), 	object2, 'props in both have the child values');
+	assert.equal(map.attr('propA'), 	object1, 'props only in the parent have the correct values');
 });
 
 
-QUnit.test("can set properties to undefined", function(){
+QUnit.test("can set properties to undefined", function(assert) {
 	var MyMap = CanMap.extend({
 		define: {
 			foo: {
@@ -1440,10 +1440,10 @@ QUnit.test("can set properties to undefined", function(){
 	var map = new MyMap();
 
 	map.attr('foo', 'bar');
-	equal(map.attr('foo'), 'bar', 'foo should be bar');
+	assert.equal(map.attr('foo'), 'bar', 'foo should be bar');
 
 	map.attr('foo', undefined);
-	equal(typeof map.attr('foo'), 'undefined', 'foo should be undefined');
+	assert.equal(typeof map.attr('foo'), 'undefined', 'foo should be undefined');
 });
 
 QUnit.test("subclass defines do not affect superclass ones", function(assert) {
@@ -1493,7 +1493,7 @@ QUnit.test("subclass defines do not affect superclass ones", function(assert) {
 	assert.equal(new VM2c().attr("foo"), "barthud", "correct define on child class object with extending define");
 });
 
-QUnit.test("value function not set on constructor defaults", function(){
+QUnit.test("value function not set on constructor defaults", function(assert) {
 	var MyMap = CanMap.extend({
 		define: {
 			propA: {
@@ -1506,13 +1506,13 @@ QUnit.test("value function not set on constructor defaults", function(){
 
 	var map = new MyMap();
 
-	equal(MyMap.defaults.propA, undefined, 'Generator function does not result in property set on defaults');
-	notEqual(MyMap.defaultGenerators.propA, undefined, 'Generator function set on defaultGenerators');
-	equal(map.attr("propA"), 1, 'Instance value set properly'); //this is mainly so that CI doesn't complain about unused variable
+	assert.equal(MyMap.defaults.propA, undefined, 'Generator function does not result in property set on defaults');
+	assert.notEqual(MyMap.defaultGenerators.propA, undefined, 'Generator function set on defaultGenerators');
+	assert.equal(map.attr("propA"), 1, 'Instance value set properly'); //this is mainly so that CI doesn't complain about unused variable
 
 });
 
-QUnit.test("can.hasKey", function() {
+QUnit.test("can.hasKey", function(assert) {
 	var Parent = CanMap.extend({
 		define: {
 			parentProp: {
@@ -1556,22 +1556,22 @@ QUnit.test("can.hasKey", function() {
 	var vm = new VM();
 
 	// hasKey
-	equal(canReflect.hasKey(vm, "prop"), true, "vm.hasKey('prop') true");
-	equal(canReflect.hasKey(vm, "derivedProp"), true, "vm.hasKey('derivedProp') true");
+	assert.equal(canReflect.hasKey(vm, "prop"), true, "vm.hasKey('prop') true");
+	assert.equal(canReflect.hasKey(vm, "derivedProp"), true, "vm.hasKey('derivedProp') true");
 
-	equal(canReflect.hasKey(vm, "parentProp"), true, "vm.hasKey('parentProp') true");
-	equal(canReflect.hasKey(vm, "parentDerivedProp"), true, "vm.hasKey('parentDerivedProp') true");
+	assert.equal(canReflect.hasKey(vm, "parentProp"), true, "vm.hasKey('parentProp') true");
+	assert.equal(canReflect.hasKey(vm, "parentDerivedProp"), true, "vm.hasKey('parentDerivedProp') true");
 
-	equal(canReflect.hasKey(vm, "anotherProp"), false, "vm.hasKey('anotherProp') false");
+	assert.equal(canReflect.hasKey(vm, "anotherProp"), false, "vm.hasKey('anotherProp') false");
 
-	equal(canReflect.hasKey(vm, "aFunction"), true, "vm.hasKey('aFunction') true");
-	equal(canReflect.hasKey(vm, "parentFunction"), true, "vm.hasKey('parentFunction') true");
+	assert.equal(canReflect.hasKey(vm, "aFunction"), true, "vm.hasKey('aFunction') true");
+	assert.equal(canReflect.hasKey(vm, "parentFunction"), true, "vm.hasKey('parentFunction') true");
 
 	vm.attr('lateProp', 'something');
-	equal(canReflect.hasKey(vm, "lateProp"), true, "vm.hasKey('lateProp') true");
+	assert.equal(canReflect.hasKey(vm, "lateProp"), true, "vm.hasKey('lateProp') true");
 });
 
-QUnit.test("can.getOwnEnumerableKeys", function() {
+QUnit.test("can.getOwnEnumerableKeys", function(assert) {
 	var ParentMap = CanMap.extend({
 		define: {
 			parentNoEnum: {
@@ -1622,38 +1622,38 @@ QUnit.test("can.getOwnEnumerableKeys", function() {
 
 	var vm = new VM();
 	// getOwnEnumerableKeys for defined props, including copied from Parent
-	deepEqual( canReflect.getOwnEnumerableKeys(vm), [ "enumerableProp", "enumByDefault", "parentEnum", "parentEnumByDefault" ], "vm.getOwnEnumerableKeys()");
+	assert.deepEqual( canReflect.getOwnEnumerableKeys(vm), [ "enumerableProp", "enumByDefault", "parentEnum", "parentEnumByDefault" ], "vm.getOwnEnumerableKeys()");
 
 	vm.attr('lateProp', true);
-	deepEqual( canReflect.getOwnEnumerableKeys(vm), [ "enumerableProp", "enumByDefault", "parentEnum", "parentEnumByDefault", "lateProp" ], "vm.getOwnEnumerableKeys() with late prop");
+	assert.deepEqual( canReflect.getOwnEnumerableKeys(vm), [ "enumerableProp", "enumByDefault", "parentEnum", "parentEnumByDefault", "lateProp" ], "vm.getOwnEnumerableKeys() with late prop");
 
 });
 
-QUnit.test("can.getOwnEnumerableKeys works without define (#81)", function() {
+QUnit.test("can.getOwnEnumerableKeys works without define (#81)", function(assert) {
 	var VM = CanMap.extend({});
 
 	var vm = new VM({ foo: "bar" });
-	deepEqual( canReflect.getOwnEnumerableKeys(vm), [ "foo" ], "without define");
+	assert.deepEqual( canReflect.getOwnEnumerableKeys(vm), [ "foo" ], "without define");
 
 	vm.attr("abc", "xyz");
-	deepEqual( canReflect.getOwnEnumerableKeys(vm), [ "foo", "abc" ], "without define, with late prop");
+	assert.deepEqual( canReflect.getOwnEnumerableKeys(vm), [ "foo", "abc" ], "without define, with late prop");
 
 	VM = CanMap.extend({
 		define: {}
 	});
 
 	vm = new VM({ foo: "bar" });
-	deepEqual( canReflect.getOwnEnumerableKeys(vm), [ "foo" ], "with empty define");
+	assert.deepEqual( canReflect.getOwnEnumerableKeys(vm), [ "foo" ], "with empty define");
 
 	vm.attr("abc", "xyz");
-	deepEqual( canReflect.getOwnEnumerableKeys(vm), [ "foo", "abc" ], "with empty define, with late prop");
+	assert.deepEqual( canReflect.getOwnEnumerableKeys(vm), [ "foo", "abc" ], "with empty define, with late prop");
 });
 
-QUnit.test("can.getOwnEnumerableKeys works with null", function() {
+QUnit.test("can.getOwnEnumerableKeys works with null", function(assert) {
 	var VM = CanMap.extend({});
 
 	var vm = new VM({ foo: null });
-	deepEqual( canReflect.getOwnEnumerableKeys(vm), [ "foo" ], "getOwnEnumerableKeys works with null");
+	assert.deepEqual( canReflect.getOwnEnumerableKeys(vm), [ "foo" ], "getOwnEnumerableKeys works with null");
 });
 
 require("can-reflect-tests/observables/map-like/type/type")("CanMap / can-map-define", function(){
