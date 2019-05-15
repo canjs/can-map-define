@@ -796,7 +796,9 @@ QUnit.test("nested define", function(assert) {
 	assert.ok(nested.attr('examples.two.deep') instanceof Example);
 });
 
-QUnit.test('Can make an attr alias a compute (#1470)', 9, function(assert) {
+QUnit.test('Can make an attr alias a compute (#1470)', function(assert) {
+	assert.expect(9);
+
 	var computeValue = compute(1);
 	var GetMap = CanMap.extend({
 		define: {
@@ -1023,7 +1025,9 @@ QUnit.test('Can read a defined property with a set/get method (#1648)', function
 	assert.equal(map.attr('foo'), 'baz', 'Calling .attr(\'foo\') returned the correct value');
 });
 
-QUnit.test('Can bind to a defined property with a set/get method (#1648)', 3, function(assert) {
+QUnit.test('Can bind to a defined property with a set/get method (#1648)', function(assert) {
+	assert.expect(3);
+
 	// Problem: "get" is not called before and after the "set"
 	// Problem: Function bound to "foo" is not called
 	// Problem: Cannot read the value of "foo"
@@ -1307,7 +1311,9 @@ QUnit.test("compute props can be set to null or undefined (#2372)", function(ass
 	assert.equal(vmUndef.foo, undefined, "foo is null, no error thrown");
 });
 
-QUnit.test("can inherit computes from another map (#2)", 4, function(assert) {
+QUnit.test("can inherit computes from another map (#2)", function(assert) {
+	assert.expect(4);
+	
 	var string1 = 'a string';
 	var string2 = 'another string';
 
