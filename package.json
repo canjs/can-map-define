@@ -40,7 +40,7 @@
     "can-event-queue": "^1.0.1",
     "can-list": "^4.0.0",
     "can-log": "^1.0.0",
-    "can-map": "^4.3.5",
+    "can-map": "^4.3.8",
     "can-observation-recorder": "^1.2.0",
     "can-queues": "^1.0.1",
     "can-reflect": "^1.15.2",
