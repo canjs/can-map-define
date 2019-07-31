@@ -17,8 +17,10 @@ require("can-map-define");
 
 var Person = CanMap.extend({
     define: {
-        fullName: function(){
-            return this.attr("first") + " "+ this.attr("last")
+        fullName: {
+          get () {
+              return this.attr("first") + " "+ this.attr("last");
+          }
         }
     }
 })
