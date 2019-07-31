@@ -1313,7 +1313,7 @@ QUnit.test("compute props can be set to null or undefined (#2372)", function(ass
 
 QUnit.test("can inherit computes from another map (#2)", function(assert) {
 	assert.expect(4);
-	
+
 	var string1 = 'a string';
 	var string2 = 'another string';
 
@@ -1793,7 +1793,7 @@ QUnit.test("can.getOwnEnumerableKeys with default behavior, nested maps and late
 	);
 });
 
-QUnit.test("resolver behavior: with counter (#96)", function(){
+QUnit.test("resolver behavior: with counter (#96)", function(assert){
 	var Person = CanMap.extend('Person', {
 		define: {
 			name: {
@@ -1809,18 +1809,18 @@ QUnit.test("resolver behavior: with counter (#96)", function(){
 	});
 
 	var me = new Person();
-	QUnit.equal(me.attr("nameChangedCount"), 0, "unbound value");
+	assert.equal(me.attr("nameChangedCount"), 0, "unbound value");
 
 	me.attr("name", "first");
 
-	QUnit.equal(me.attr("nameChangedCount"), 0, "unbound value");
+	assert.equal(me.attr("nameChangedCount"), 0, "unbound value");
 
 	me.on("nameChangedCount", function(ev, newVal, oldVal){
-			QUnit.equal(newVal, 1, "updated count");
-			QUnit.equal(oldVal, 0, "updated count from old value");
+			assert.equal(newVal, 1, "updated count");
+			assert.equal(oldVal, 0, "updated count from old value");
 	});
 
 	me.attr("name", "second");
 
-	QUnit.equal(me.attr("nameChangedCount"), 1, "bound value");
+	assert.equal(me.attr("nameChangedCount"), 1, "bound value");
 });
