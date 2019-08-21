@@ -9,8 +9,8 @@ var CanMap = require('can-map');
 var compute = require('can-compute');
 var canReflect = require('can-reflect');
 var ObservationRecorder = require('can-observation-recorder');
-var canSymbol = require('can-symbol');
 var Resolver = require("can-simple-observable/resolver/resolver");
+var canSymbol = require('can-symbol');
 
 require('can-list');
 
