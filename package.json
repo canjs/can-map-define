@@ -49,7 +49,7 @@
   },
   "devDependencies": {
     "bit-docs": "0.0.7",
-    "can-component": "^4.0.4",
+    "can-component": "^5.0.0",
     "can-key": "<2.0.0",
     "can-reflect-tests": "^1.0.0",
     "can-route": "^4.1.1",
