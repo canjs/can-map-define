@@ -510,7 +510,7 @@ QUnit.test("serialize basics", function(assert) {
 
 });
 
-QUnit.test("In legacy mode, .attr() keeps attributes set to serialize:false", function(assert){
+QUnit.test("(can-23) In legacy mode, .attr() keeps attributes set to serialize:false", function(assert){
 	const Person = CanMap.extend({
 		define: {
 			age: { serialize: false }
