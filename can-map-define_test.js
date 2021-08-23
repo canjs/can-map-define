@@ -510,6 +510,25 @@ QUnit.test("serialize basics", function(assert) {
 
 });
 
+QUnit.test("(can-23) In legacy mode, .attr() keeps attributes set to serialize:false", function(assert){
+	const Person = CanMap.extend({
+		define: {
+			age: { serialize: false }
+		}
+	});
+
+	// Enable legacy behavior on Person. This is used by can-23.
+	Object.defineProperty(Person.prototype, "_legacyAttrBehavior",{
+		value: true,
+		enumerable: false
+	});
+
+	const morgan = new Person({ age: 90 });
+
+	assert.equal(morgan.attr().age, 90, ".attr() keeps attributes set to serialize:false")
+	assert.equal(morgan.serialize().age, undefined, ".serialize() removes attributes set to serialize:false")
+});
+
 QUnit.test("serialize context", function(assert) {
 	var context, serializeContext;
 	var MyMap = CanMap.extend({
